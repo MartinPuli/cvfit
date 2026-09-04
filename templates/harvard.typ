@@ -80,7 +80,8 @@
         )]
       }
       if e.subtitle != "" or e.meta != "" {
-        v(0.5pt)
+        // explicit, since the title block above has below: 0pt
+        v(3.5pt * rhythm)
         grid(
           columns: (1fr, auto),
           align: (left, right),
@@ -92,7 +93,7 @@
       // scans a skills block by label; an ATS reads it as plain lines.
       if e.items.len() > 0 {
         for (ii, it) in e.items.enumerate() {
-          if ii > 0 { v(2.5pt * rhythm) }
+          if ii > 0 { v(4pt * rhythm) }   // wider than the leading, or wrapped lines read closer than separate items
           block(above: 0pt, below: 0pt)[#grid(columns: (1fr,), [#strong(it.label): #it.text])]
         }
       }
