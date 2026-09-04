@@ -38,7 +38,7 @@
           "priority": 92,
           "bullets": [
             {
-              "text": "Built Execution OS solo in 2 months: 30 mini apps, LLM pipelines, integrated accounting and an MCP server exposing the operation as agent-callable tools, aiming to offload 80% of the manual work. In daily use and demoed to other executives.",
+              "text": "Built Execution OS solo in 2 months: 30 mini apps, LLM pipelines, integrated accounting and an MCP server exposing the operation as agent-callable tools, aiming to offload 80% of manual work; in daily use, demoed to other executives.",
               "priority": 90
             }
           ]
@@ -64,7 +64,7 @@
           "priority": 95,
           "bullets": [
             {
-              "text": "Migrated legacy 4D systems to Java and Spring Boot for the second largest private bank in Argentina and an automotive lender, with an agentic CI/CD pipeline that automated the conversion and cut manual effort about 40%.",
+              "text": "Migrated 4D systems to Java and Spring Boot for Argentina's second largest private bank and an automotive lender; an agentic CI/CD pipeline automated the conversion and cut manual effort about 40%.",
               "priority": 93
             }
           ]
