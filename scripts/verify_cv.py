@@ -18,6 +18,8 @@ def main():
     ap.add_argument("pdf")
     ap.add_argument("--profile")
     ap.add_argument("--max-pages", type=int, default=1)
+    ap.add_argument("--min-fill", type=float, default=0.75,
+                    help="fail when the content uses less of the page than this")
     ap.add_argument("--master", help="the untailored profile. Fails if tailoring changed a date or title, or invented an entry.")
     a = ap.parse_args()
 
@@ -32,6 +34,19 @@ def main():
     pages = int(m.group(1)) if m else -1
     if pages > a.max_pages or pages < 1:
         fails.append("page count is %d, expected at most %d" % (pages, a.max_pages))
+
+    bb = subprocess.run(["pdftotext", "-bbox", str(pdf), "-"], capture_output=True, text=True).stdout
+    ys = [float(m) for m in re.findall(r'yMax="([0-9.]+)"', bb)]
+    tops = [float(m) for m in re.findall(r'yMin="([0-9.]+)"', bb)]
+    hs = [float(m) for m in re.findall(r'<page width="[0-9.]+" height="([0-9.]+)"', bb)]
+    fill = None
+    if ys and hs and tops:
+        top = min(tops)
+        fill = (max(ys) - top) / (hs[0] - 2 * top)
+        if fill < a.min_fill:
+            fails.append("content uses %.0f%% of the page, under the %.0f%% floor. A one-pager "
+                         "that stops short was not edited to fit, it just ran out of material."
+                         % (fill * 100, a.min_fill * 100))
 
     text = subprocess.run(["pdftotext", str(pdf), "-"], capture_output=True, text=True).stdout
     if len(text.strip()) < 200:
@@ -80,6 +95,8 @@ def main():
                     fails.append("title changed for %s: %r became %r" % (e["title"], sub0, e.get("subtitle", "")))
 
     print("pages: %d" % pages)
+    if fill is not None:
+        print("page fill: %.0f%%" % (fill * 100))
     print("extracted characters: %d" % len(text.strip()))
     for wmsg in warns:
         print("WARN  " + wmsg)

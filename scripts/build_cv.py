@@ -110,7 +110,7 @@ def view(p, dropped):
     return out
 
 
-def to_typst(v, font, size, margin):
+def to_typst(v, font, size, margin, rhythm=1.0):
     fonts = "(" + ", ".join('"%s"' % esc_str(f.strip()) for f in str(font).split(",")) + ")"
 
     def arr(items):
@@ -128,9 +128,37 @@ def to_typst(v, font, size, margin):
         secs.append("(heading: [%s], entries: %s)" % (esc(s["heading"]), arr(entries)))
     contact = arr(["[" + esc(c) + "]" for c in v.get("contact", [])])
     return (TEMPLATE.read_text()
-            + '\n#cv(name: "%s", contact: %s, summary: [%s], sections: %s, font: %s, size: %s, margin: %s)\n'
+            + '\n#cv(name: "%s", contact: %s, summary: [%s], sections: %s, font: %s, size: %s, margin: %s, rhythm: %s)\n'
             % (esc_str(v["name"]), contact, esc(v.get("summary", "")),
-               arr(secs), fonts, size, margin))
+               arr(secs), fonts, size, margin, rhythm))
+
+
+def fill_ratio(pdf, margin_pt):
+    """How much of the usable text block the content actually occupies.
+
+    A one-page resume that ends two inches short is not "fitted", it is
+    under-written: the page limit was met by luck rather than by editing. The
+    ratio is measured off the last text baseline in the PDF, not estimated.
+    """
+    out = subprocess.run(["pdftotext", "-bbox", str(pdf), "-"],
+                         capture_output=True, text=True).stdout
+    ys = [float(m) for m in re.findall(r'yMax="([0-9.]+)"', out)]
+    hs = [float(m) for m in re.findall(r"<page width=\"[0-9.]+\" height=\"([0-9.]+)\"", out)]
+    if not ys or not hs:
+        return None
+    page_h, last = hs[0], max(ys)
+    usable = page_h - 2 * margin_pt
+    return max(0.0, min(1.0, (last - margin_pt) / usable))
+
+
+def pt(v):
+    """'0.55in' or '12pt' to points."""
+    v = str(v).strip()
+    if v.endswith("in"):
+        return float(v[:-2]) * 72
+    if v.endswith("mm"):
+        return float(v[:-2]) * 72 / 25.4
+    return float(v.rstrip("pt"))
 
 
 def compile_pdf(src, out):
@@ -173,6 +201,10 @@ def main():
     ap.add_argument("--size", default="10.5pt")
     ap.add_argument("--margin", default="0.55in")
     ap.add_argument("--kind", help="job | hackathon | competition. Reorders sections and shifts what the fitter drops first.")
+    ap.add_argument("--target-fill", type=float, default=0.93,
+                    help="how much of the text block a finished page should use, 0 to 1")
+    ap.add_argument("--no-polish", action="store_true",
+                    help="skip the pass that opens the rhythm to fill a short page")
     ap.add_argument("--no-restore", action="store_true", help="skip the pass that walks dropped items back in")
     ap.add_argument("--keep-typ", action="store_true")
     a = ap.parse_args()
@@ -186,8 +218,10 @@ def main():
     out = Path(a.out)
     dropped, log = set(), []
 
+    rhythm = [1.0]
+
     def render():
-        src = to_typst(view(p, dropped), a.font, a.size, a.margin)
+        src = to_typst(view(p, dropped), a.font, a.size, a.margin, rhythm[0])
         return src, compile_pdf(src, out)
 
     src, pages = render()
@@ -216,6 +250,34 @@ def main():
                 dropped.add(cid)
                 src, pages = render()
 
+    # Polish: the content is settled, so spend whatever page is left on air rather
+    # than leaving a hole under the last line. Bounded, and it never overflows,
+    # because every step is compiled and measured.
+    margin_pt = pt(a.margin)
+    fill = fill_ratio(out, margin_pt)
+    polished = False
+    # Only polish a page that is already nearly full. Opening the rhythm on a
+    # half-empty page turns missing content into decorative whitespace, which
+    # reads worse than the gap it was meant to hide.
+    POLISH_FLOOR, POLISH_CEIL = 0.70, 1.45
+    if fill is not None and not a.no_polish and pages <= a.max_pages and fill >= POLISH_FLOOR:
+        best = (rhythm[0], src, pages, fill)
+        step = 1.0
+        while step < POLISH_CEIL:
+            step = round(step + 0.06, 2)
+            rhythm[0] = step
+            src2, pages2 = render()
+            f2 = fill_ratio(out, margin_pt)
+            if pages2 > a.max_pages or f2 is None:
+                break
+            if f2 <= a.target_fill + 0.02:
+                best = (step, src2, pages2, f2)
+            else:
+                break
+        rhythm[0], src, pages, fill = best
+        polished = rhythm[0] > 1.0
+        render()
+
     final = view(p, dropped)
     if a.keep_typ:
         out.with_suffix(".typ").write_text(src)
@@ -226,6 +288,17 @@ def main():
         print("kind: %s" % cfg["label"])
         print("  leads with: %s" % cfg["lead_with"])
     print("%s  %d page(s)" % (out, pages))
+    if fill is not None:
+        bar = "#" * int(round(fill * 30))
+        print("page fill: %3.0f%%  [%-30s]" % (fill * 100, bar))
+        if polished:
+            print("polish opened the rhythm to %.2fx to use the space left over" % rhythm[0])
+        if fill < 0.70:
+            missing = int(round((a.target_fill - fill) * 46))
+            print("  short by roughly %d lines. Polish stays off below 70%% on purpose:" % missing)
+            print("  write another bullet, do not stretch the whitespace.")
+        elif fill < 0.85:
+            print("  there is room for a line or two more if you have one.")
     print("effective profile: %s" % effp)
     gone = [(k, l) for cid, k, l, _ in log if cid in dropped]
     if gone:
