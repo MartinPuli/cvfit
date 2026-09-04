@@ -64,7 +64,7 @@
           "priority": 95,
           "bullets": [
             {
-              "text": "Migrated legacy 4D systems to Java and Spring Boot for the second largest private bank in Argentina and an automotive lender, with an agentic CI/CD pipeline that automated the conversion and cut manual effort roughly 40%.",
+              "text": "Migrated legacy 4D systems to Java and Spring Boot for the second largest private bank in Argentina and an automotive lender, with an agentic CI/CD pipeline that automated the conversion and cut manual effort about 40%.",
               "priority": 93
             }
           ]
@@ -143,7 +143,7 @@
           "items": [
             {
               "label": "Backend",
-              "text": "Java, Spring Boot, Python, TypeScript, React, SQL, PostgreSQL, Sybase, Docker, AWS, COBOL (CICS, JCL)."
+              "text": "Java, Spring Boot, Python, TypeScript, React, SQL, PostgreSQL, Sybase, Docker, AWS, COBOL."
             },
             {
               "label": "AI",

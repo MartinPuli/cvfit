@@ -235,7 +235,7 @@
           "items": [
             {
               "label": "Backend",
-              "text": "Java, Spring Boot, Python, TypeScript, React, SQL, PostgreSQL, Sybase, Docker, AWS, COBOL (CICS, JCL)."
+              "text": "Java, Spring Boot, Python, TypeScript, React, SQL, PostgreSQL, Sybase, Docker, AWS, COBOL."
             },
             {
               "label": "AI",
