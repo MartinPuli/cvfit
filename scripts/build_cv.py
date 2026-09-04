@@ -13,7 +13,47 @@ passes unnoticed.
 import argparse, json, re, shutil, subprocess, sys, tempfile
 from pathlib import Path
 
-TEMPLATE = Path(__file__).resolve().parent.parent / "templates" / "harvard.typ"
+ROOT = Path(__file__).resolve().parent.parent
+TEMPLATE = ROOT / "templates" / "harvard.typ"
+KINDS = ROOT / "kinds"
+
+
+def apply_kind(p, kind):
+    """Reorder sections and shift priorities for the kind of thing being applied to.
+
+    A job, a hackathon and a fellowship read the same career from different ends.
+    The order decides what a skimming reader sees first; the boost decides what
+    the fitter sacrifices when the page runs out.
+    """
+    f = KINDS / (kind + ".json")
+    if not f.exists():
+        sys.exit("unknown kind: %s (have: %s)"
+                 % (kind, ", ".join(sorted(x.stem for x in KINDS.glob("*.json")))))
+    cfg = json.loads(f.read_text())
+    order = [h.lower() for h in cfg.get("section_order", [])]
+
+    def rank(sec):
+        h = sec["heading"].lower()
+        for i, o in enumerate(order):
+            if o in h or h in o:
+                return i
+        return len(order)
+
+    p["sections"].sort(key=rank)
+    for sec in p["sections"]:
+        delta = 0
+        for key, val in cfg.get("boost", {}).items():
+            hl, kl = sec["heading"].lower(), key.lower()
+            if kl in hl or hl in kl:
+                delta = val
+                break
+        if delta:
+            sec["priority"] += delta
+            for e in sec["entries"]:
+                e["priority"] += delta
+                for b in e["bullets"]:
+                    b["priority"] += delta
+    return cfg
 
 
 def esc(s):
@@ -122,6 +162,7 @@ def main():
     ap.add_argument("--font", default="New Computer Modern")
     ap.add_argument("--size", default="10.5pt")
     ap.add_argument("--margin", default="0.5in")
+    ap.add_argument("--kind", help="job | hackathon | competition. Reorders sections and shifts what the fitter drops first.")
     ap.add_argument("--no-restore", action="store_true", help="skip the pass that walks dropped items back in")
     ap.add_argument("--keep-typ", action="store_true")
     a = ap.parse_args()
@@ -131,6 +172,7 @@ def main():
             sys.exit("missing dependency: " + tool)
 
     p = load(a.profile)
+    cfg = apply_kind(p, a.kind) if a.kind else None
     out = Path(a.out)
     dropped, log = set(), []
 
@@ -168,6 +210,9 @@ def main():
     effp = out.with_suffix(".profile.json")
     effp.write_text(json.dumps(final, ensure_ascii=False, indent=2) + "\n")
 
+    if cfg:
+        print("kind: %s" % cfg["label"])
+        print("  leads with: %s" % cfg["lead_with"])
     print("%s  %d page(s)" % (out, pages))
     print("effective profile: %s" % effp)
     gone = [(k, l) for cid, k, l in log if cid in dropped]

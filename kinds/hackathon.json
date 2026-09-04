@@ -1,0 +1,25 @@
+{
+  "label": "Hackathon application",
+  "section_order": [
+    "Hackathons",
+    "Projects",
+    "Experience",
+    "Education",
+    "Leadership and Activities",
+    "Skills and Interests"
+  ],
+  "boost": {
+    "Hackathons": 30,
+    "Projects": 20,
+    "Leadership and Activities": 5,
+    "Experience": -10,
+    "Education": -10
+  },
+  "lead_with": "Competition record with denominators, then things that are live and clickable.",
+  "noise": [
+    "long employment bullets",
+    "GPA",
+    "enterprise process detail"
+  ],
+  "notes": "Organisers read an application in seconds and admit thousands. They are filtering for people who ship something in 36 hours and do not vanish on Sunday night. Ranked results with denominators, working links and evidence a past project outlived its event beat any job title. Include projects that are running now, not the most technically impressive dead one."
+}

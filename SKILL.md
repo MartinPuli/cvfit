@@ -43,7 +43,28 @@ Pull from whatever exists, in this order of trust:
 
 Every number, title and date has to trace back to one of those. When something is uncertain, ask or leave it out; never round a figure up to make a bullet land.
 
-## Step 3: tailor
+## Step 3: pick the kind
+
+A job, a hackathon and a fellowship read the same career from opposite ends, so
+this is a decision before it is a formatting choice.
+
+| Kind | Leads with | Treats as noise |
+|---|---|---|
+| `job` | Production work: what shipped, who depended on it, what it moved | Podium counts, GPA once there is real work history |
+| `hackathon` | Competition record with denominators, then things live and clickable | Long employment bullets, enterprise process detail |
+| `competition` | Ranked results against a named field, then academic record, then trajectory | Stack minutiae, internal tooling |
+
+`kinds/*.json` holds the section order, the priority shifts and the reasoning.
+Passing `--kind` reorders the sections and changes what the fitter sacrifices
+first, so the same profile produces genuinely different documents rather than the
+same one with the headings moved.
+
+Read the `notes` field of the kind before writing bullets. A hackathon organiser
+filtering thousands of applications in seconds wants evidence a past project
+outlived its weekend; a hiring manager wants to know whether this person has done
+the job before. Those are different bullets, not different fonts.
+
+## Step 4: tailor
 
 Copy the master profile, then for this specific posting:
 
@@ -54,25 +75,41 @@ Copy the master profile, then for this specific posting:
 
 Bullet rules: start with a past-tense verb, no first-person pronouns, name the domain and the stakes, use digits, and put the outcome in the same sentence as the action. `verify_cv.py` rejects pronouns and em dashes.
 
-## Step 4: build
+## Step 5: build
 
 ```bash
-python3 scripts/build_cv.py profile.json -o out/cv.pdf --max-pages 1
+python3 scripts/build_cv.py profile.json -o out/cv.pdf --kind job --max-pages 1
 ```
 
 The fitter drops the lowest-priority bullets first, then entries left without any, then walks the dropped items back in from the top down and restores whatever fits. It prints everything it removed and writes the effective profile next to the PDF, so what is on the page is always inspectable.
 
 Auto-fit is a safety net, not the tailoring step. When it reports more than two or three drops, the profile was too long and the selection should be fixed by hand.
 
-## Step 5: verify
+## Step 6: verify
 
 ```bash
-python3 scripts/verify_cv.py out/cv.pdf --profile out/cv.profile.json --max-pages 1
+python3 scripts/verify_cv.py out/cv.pdf --profile out/cv.profile.json \
+       --master profile.json --max-pages 1
+python3 scripts/match_report.py out/cv.pdf --target target.json
 ```
 
-Checks the page count, that the text layer is extractable (an image-only PDF is invisible to an ATS), that the name and every section heading survived rendering, and that no first-person pronouns or em dashes slipped in. Non-zero exit means do not send it.
+Checks the page count, that the text layer is extractable (an image-only PDF is
+invisible to an ATS), that the name and every section heading survived rendering,
+and that no first-person pronouns or em dashes slipped in. Non-zero exit means do
+not send it.
 
-## Step 6: report
+`--master` is the guard that matters. It compares the tailored profile against the
+untailored one and fails if a date moved, a job title grew, or an entry appeared
+that was not in the master. Tailoring is allowed to choose and reorder; it is not
+allowed to promote anyone. That check is code because prose asking a model to be
+honest is not enforcement.
+
+`match_report.py` lists which of the posting's keywords reached the page and which
+did not. It gives no score on purpose: a number invites writing to the list instead
+of to the truth. Treat every uncovered word as a question, "is there real work
+behind this", and leave it out when the answer is no.
+
+## Step 7: report
 
 Hand over the PDF and say, in this order: what was dropped to make it fit, where the candidate genuinely matches the posting, and where they do not. If the honest answer is that the fit is weak, say so; deciding to apply anyway is the candidate's call, not the tool's.
 

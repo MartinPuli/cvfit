@@ -68,7 +68,7 @@
               "priority": 90
             },
             {
-              "text": "Built an agentic testing pipeline in CI that automated 4D-to-web conversion and cut manual migration effort roughly 40%, catching regressions before release.",
+              "text": "Built an agentic testing pipeline into the CI/CD flow that automated 4D-to-web conversion and cut manual migration effort roughly 40%, catching regressions before release.",
               "priority": 88
             }
           ]
@@ -81,7 +81,7 @@
           "priority": 80,
           "bullets": [
             {
-              "text": "Wrote COBOL Batch and Online programs on a core banking mainframe (CICS, JCL) under change control on systems settling real transactions nightly. IBM Z Xplore certified.",
+              "text": "Wrote COBOL Batch and Online programs on a core banking mainframe (CICS, JCL) under change control, production systems settling real transactions nightly. IBM Z Xplore certified.",
               "priority": 75
             }
           ]

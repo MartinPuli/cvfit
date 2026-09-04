@@ -1,0 +1,26 @@
+{
+  "label": "Job application",
+  "section_order": [
+    "Experience",
+    "Projects",
+    "Education",
+    "Leadership and Activities",
+    "Skills and Interests"
+  ],
+  "boost": {
+    "Experience": 25,
+    "Projects": 10,
+    "Skills and Interests": 5,
+    "Hackathons": -25,
+    "Awards": -15,
+    "Leadership and Activities": -10
+  },
+  "student_note": "Move Education first when the candidate has under three years of full-time work.",
+  "lead_with": "Production work: what shipped, who depended on it, what it moved.",
+  "noise": [
+    "hackathon podium counts",
+    "GPA once there is real work history",
+    "community event attendance"
+  ],
+  "notes": "A hiring manager is asking one question: has this person done the job before, or the nearest thing to it. Tenure, domain and outcome beat volume of side projects. Name the industry and the stakes, because 'built a web app' and 'built payment paths for a bank' read as different jobs."
+}

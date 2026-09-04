@@ -18,6 +18,7 @@ def main():
     ap.add_argument("pdf")
     ap.add_argument("--profile")
     ap.add_argument("--max-pages", type=int, default=1)
+    ap.add_argument("--master", help="the untailored profile. Fails if tailoring changed a date or title, or invented an entry.")
     a = ap.parse_args()
 
     pdf = Path(a.pdf)
@@ -55,6 +56,28 @@ def main():
         kept = sum(len(e.get("bullets", [])) for s in p["sections"] for e in s["entries"])
         if kept == 0:
             warns.append("profile has no bullets at all")
+
+    if a.master and a.profile:
+        m = json.loads(Path(a.master).read_text())
+        t = json.loads(Path(a.profile).read_text())
+        ref = {}
+        for s_ in m["sections"]:
+            for e in s_["entries"]:
+                if e.get("title"):
+                    ref[e["title"].strip().lower()] = (e.get("date", ""), e.get("subtitle", ""))
+        for s_ in t["sections"]:
+            for e in s_["entries"]:
+                if not e.get("title"):
+                    continue
+                k = e["title"].strip().lower()
+                if k not in ref:
+                    fails.append("entry not present in the master profile: %s" % e["title"])
+                    continue
+                d0, sub0 = ref[k]
+                if e.get("date", "") != d0:
+                    fails.append("date changed for %s: %r became %r" % (e["title"], d0, e.get("date", "")))
+                if e.get("subtitle", "") != sub0:
+                    fails.append("title changed for %s: %r became %r" % (e["title"], sub0, e.get("subtitle", "")))
 
     print("pages: %d" % pages)
     print("extracted characters: %d" % len(text.strip()))

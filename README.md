@@ -22,6 +22,27 @@ whatever still fits, so a coarse cut does not leave a third of the page blank.
 Everything it removed gets printed. Silent truncation is how people send resumes
 missing the line they cared about most.
 
+## Kinds
+
+The same career reads differently depending on what it is aimed at, so `--kind`
+changes section order and what the fitter drops first:
+
+```bash
+python3 scripts/build_cv.py profile.json -o out/cv.pdf --kind hackathon
+```
+
+| Kind | Order it produces |
+|---|---|
+| `job` | Experience, Projects, Education, Skills |
+| `hackathon` | Hackathons and Projects first, then Experience, Education, Leadership |
+| `competition` | Awards, Education, Projects, Experience, Leadership |
+
+A hackathon organiser reading thousands of applications wants evidence that a
+past project outlived its weekend. A hiring manager wants to know whether this
+person has done the job before. A selection committee compares candidates against
+each other, so `1st of 151` carries weight that "won a hackathon" does not. Same
+material, three documents.
+
 ## Install
 
 Needs Python 3.9+, [Typst](https://typst.app), and `pdfinfo` / `pdftotext` from poppler.
@@ -73,10 +94,28 @@ One JSON file per person. `schema/profile.schema.json` documents it; the shape i
 text layer, a missing name or section heading, first-person pronouns, or em dashes.
 Exit code is non-zero, so it works as a pre-send gate or a CI step.
 
+## Keyword coverage
+
+```bash
+python3 scripts/match_report.py out/cv.pdf --target target.json
+```
+
+Lists which of the posting's keywords made it onto the page and which did not.
+No score, deliberately: a number invites writing to the keyword list rather than
+to the truth. Each uncovered word is a question worth asking once, "is there real
+work behind this", with leaving it out as the default answer.
+
 ## Honesty
 
-The skill writes an `honest_fit_assessment` into the target file and the model is
-told to report gaps out loud. `examples/target.canals.json` is a real posting where
+Two mechanisms, one of them enforced by code.
+
+`verify_cv.py --master` compares the tailored profile against the untailored one
+and fails if a date moved, a job title grew, or an entry appeared that was not in
+the master. Tailoring may choose and reorder; it may not promote anyone. Asking a
+model in prose to stay honest is not enforcement, so this one is a test.
+
+The skill also writes an `honest_fit_assessment` into the target file and the model
+is told to report gaps out loud. `examples/target.canals.json` is a real posting where
 the candidate is a partial fit, and the assessment says so instead of dressing a
 backend engineer up as a career security engineer. A resume that oversells gets
 found out in the first ten minutes of an interview, and the candidate is the one
@@ -84,10 +123,22 @@ sitting in that chair.
 
 ## Prior art
 
-The idea of packaging resume standards as a skill comes from
-[dabydat/resume-builder-skill](https://github.com/dabydat/resume-builder-skill),
-which is prose guidance for an agent. This adds the deterministic half: a renderer,
-a priority-driven fitter and a verifier that can fail.
+[dabydat/resume-builder-skill](https://github.com/dabydat/resume-builder-skill)
+packages Harvard and ATS standards as prose guidance for an agent; this adds the
+deterministic half.
+
+[Resume Forge](https://github.com/AjayLuhach/resume-forge) keeps a single master
+`resumeData.json` and emits a keyword-matched PDF from a pasted job description,
+which is where the coverage report comes from.
+[Resume Matcher](https://github.com/srbhr/Resume-Matcher) scores a resume against
+a description using embeddings; this tool reports coverage without a score, since
+a score is a target and Goodhart applies to resumes too.
+[JSON Resume](https://jsonresume.org) is the closest thing to a standard schema
+and is worth supporting as an import path.
+
+The immutable-field guard came from a JSON Resume tailoring service that protects
+fields from being rewritten. It is the one idea in this list that turns an honesty
+rule into a failing test, which is why it is here.
 
 ## Licence
 
