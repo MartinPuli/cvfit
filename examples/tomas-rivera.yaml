@@ -47,7 +47,7 @@ sections:
         date: "2024"
         priority: 70
         bullets:
-          - A 600-line Python REPL with tab completion and history, written to understand how the real one works. 120 stars.
+          - A 600-line Python REPL with tab completion and history, written to see how the real one works. 120 stars.
 
   - heading: Leadership and Activities
     entries:
