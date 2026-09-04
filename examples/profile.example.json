@@ -6,6 +6,7 @@
     "github.com/example",
     "linkedin.com/in/example"
   ],
+  "summary": "Backend engineer, four years shipping payment and ledger systems at two fintechs. Led the migration of a card-issuing platform off a monolith with no customer-facing downtime, and built the reconciliation service that closed a recurring six-figure gap.",
   "sections": [
     {
       "heading": "Education",
@@ -13,13 +14,13 @@
       "entries": [
         {
           "title": "University of Example",
-          "subtitle": "B.Sc. Mathematics",
+          "subtitle": "B.Sc. Mathematics, first class honours",
           "meta": "London, UK",
-          "date": "2020 - 2024",
+          "date": "2016 – 2020",
           "priority": 90,
           "bullets": [
             {
-              "text": "First class honours. Thesis on numerical methods for difference engines.",
+              "text": "Thesis on numerical methods for difference engines. Departmental prize for applied mathematics.",
               "priority": 70
             }
           ]
@@ -31,19 +32,104 @@
       "priority": 100,
       "entries": [
         {
-          "title": "Analytical Engine Project",
-          "subtitle": "Lead Analyst",
+          "title": "Analytical Engine Ltd (card issuing for challenger banks)",
+          "subtitle": "Senior Backend Engineer",
           "meta": "London",
-          "date": "2024 - Present",
+          "date": "2023 – Present",
           "priority": 95,
           "bullets": [
             {
-              "text": "Wrote the first published algorithm intended for a general-purpose machine, including a method for computing Bernoulli numbers.",
+              "text": "Led the migration of the card-issuing platform from a Rails monolith to Go services over nine months, cutting over without customer-facing downtime for 1.2M active cards.",
               "priority": 95
             },
             {
-              "text": "Documented the engine's operation for an audience outside mathematics, which became the reference text for the project.",
-              "priority": 70
+              "text": "Built the nightly reconciliation service matching issuer, scheme and ledger records, closing a recurring gap of roughly £180k a month within the first quarter.",
+              "priority": 93
+            },
+            {
+              "text": "Owned the on-call rotation for payments; drove p99 authorisation latency from 410ms to 140ms by moving hot-path lookups to a local cache.",
+              "priority": 85
+            }
+          ]
+        },
+        {
+          "title": "Difference Works (SME lending)",
+          "subtitle": "Backend Engineer",
+          "meta": "Manchester",
+          "date": "2020 – 2023",
+          "priority": 88,
+          "bullets": [
+            {
+              "text": "Designed the double-entry ledger that replaced spreadsheet-based loan accounting, Postgres with event sourcing, auditable to the penny across 40k loans.",
+              "priority": 88
+            },
+            {
+              "text": "Wrote the underwriting rules engine in Python; reduced manual review of applications from 60% to 22% while holding default rates flat.",
+              "priority": 84
+            }
+          ]
+        },
+        {
+          "title": "Babbage & Co",
+          "subtitle": "Software Engineering Intern",
+          "meta": "London",
+          "date": "2019",
+          "priority": 60,
+          "bullets": [
+            {
+              "text": "Built internal tooling for a data team in Python and SQL; automated a weekly report that had taken a day by hand.",
+              "priority": 55
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Projects",
+      "priority": 80,
+      "entries": [
+        {
+          "title": "ledgerlint",
+          "subtitle": "Open source, 1.4k stars",
+          "meta": "github.com/example/ledgerlint",
+          "date": "2022 – Present",
+          "priority": 80,
+          "bullets": [
+            {
+              "text": "Static checker for double-entry ledger schemas; catches unbalanced postings and orphaned accounts at CI time. Used by three fintechs in production.",
+              "priority": 78
+            }
+          ]
+        },
+        {
+          "title": "Bernoulli",
+          "subtitle": "",
+          "meta": "",
+          "date": "2021",
+          "priority": 60,
+          "bullets": [
+            {
+              "text": "Toy interpreter for a stack machine, written to understand how the first published algorithm would actually run.",
+              "priority": 58
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Leadership and Activities",
+      "priority": 70,
+      "entries": [
+        {
+          "title": "London Fintech Engineers meetup",
+          "subtitle": "Co-organiser",
+          "meta": "",
+          "date": "2022 – Present",
+          "priority": 70,
+          "bullets": [
+            {
+              "text": "Runs a quarterly meetup of 150 to 200 engineers; recruited speakers from six companies and moved it to a free venue.",
+              "priority": 68
             }
           ]
         }
@@ -51,18 +137,22 @@
     },
     {
       "heading": "Skills and Interests",
-      "priority": 80,
+      "priority": 85,
       "entries": [
         {
           "title": "",
           "subtitle": "",
           "meta": "",
           "date": "",
-          "priority": 80,
+          "priority": 85,
           "bullets": [
             {
-              "text": "Technical: algorithm design, numerical methods, symbolic notation.",
-              "priority": 80
+              "text": "Backend: Go, Python, Ruby, PostgreSQL, Kafka, Redis, Docker, Kubernetes, AWS.",
+              "priority": 85
+            },
+            {
+              "text": "Domain: card issuing, ledgers, reconciliation, PCI DSS scope reduction.",
+              "priority": 84
             },
             {
               "text": "Languages: English native, French fluent.",

@@ -89,14 +89,35 @@ Bullet rules: start with a past-tense verb, no first-person pronouns, name the d
 ## Step 5: build
 
 ```bash
-python3 scripts/build_cv.py profile.json -o out/cv.pdf --kind job --max-pages 1
+python3 scripts/build_cv.py profile.json -o out/cv.pdf --kind job --max-pages 1 --preview
 ```
 
 The fitter drops the lowest-priority bullets first, then entries left without any, then walks the dropped items back in from the top down and restores whatever fits. It prints everything it removed and writes the effective profile next to the PDF, so what is on the page is always inspectable.
 
-Auto-fit is a safety net, not the tailoring step. When it reports more than two or three drops, the profile was too long and the selection should be fixed by hand.
+Auto-fit is a safety net, not the tailoring step. When it reports more than two
+or three drops, the profile was too long and the selection should be fixed by
+hand.
 
-## Step 6: verify
+The build also prints page fill. Under 70% it refuses to polish and says how many
+lines are missing: write another bullet. Between 70% and the target it opens the
+vertical rhythm a little to use the space. At 100% there is nothing to do.
+
+## Step 6: look at it
+
+`--preview` writes a PNG of page one next to the PDF. Open it and read it as the
+recipient would, top to bottom, before running anything else. Things the checks
+cannot catch and the eye catches in two seconds:
+
+- a bullet that wraps to three lines and should be two
+- a section heading with one thin entry under it, which reads as padding
+- a title so long it pushes its date onto a second line
+- a word or two orphaned on the last line of a bullet
+- two adjacent bullets that say the same thing with different verbs
+
+Fix the profile, rebuild, look again. Two or three passes is normal; a resume that
+looked right the first time was not looked at.
+
+## Step 7: verify
 
 ```bash
 python3 scripts/verify_cv.py out/cv.pdf --profile out/cv.profile.json \
@@ -120,7 +141,18 @@ did not. It gives no score on purpose: a number invites writing to the list inst
 of to the truth. Treat every uncovered word as a question, "is there real work
 behind this", and leave it out when the answer is no.
 
-## Step 7: report
+## Step 8: deliver
+
+Before handing anything over, all of these must be true:
+
+- `verify_cv.py` exited 0 with `--master` and the default fill floor
+- the preview was looked at after the last rebuild, not before
+- every organisation the reader will not recognise says what it is
+- every number traces to something the candidate said or a document they gave
+- the fit assessment in `target.json` is honest, including where the fit is weak
+- `tests/run.py` is green if any script or template was touched
+
+## Step 9: report
 
 Hand over the PDF and say, in this order: what was dropped to make it fit, where the candidate genuinely matches the posting, and where they do not. If the honest answer is that the fit is weak, say so; deciding to apply anyway is the candidate's call, not the tool's.
 

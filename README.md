@@ -101,6 +101,29 @@ One JSON file per person. `schema/profile.schema.json` documents it; the shape i
 
 `priority` is the only field that needs explaining: higher survives the fit.
 
+## Look at it
+
+```bash
+python3 scripts/build_cv.py profile.json -o out/cv.pdf --kind job --preview
+```
+
+`--preview` writes a PNG of page one beside the PDF. The checks below catch what
+a program can catch; a bullet that wraps to three lines, a heading with one thin
+entry under it, or a title that pushes its date to the next line are caught by
+looking. The skill makes looking a step, not an afterthought.
+
+## Tests
+
+```bash
+make test        # or: python3 tests/run.py
+```
+
+Twenty-five checks, each of which builds a real PDF and inspects it. They cover
+the one-page limit, page fill, the three kinds and their section orders, the
+summary switching by kind, and every guard that must fail: two pages, first-person
+pronouns, an inflated date, an inflated title, an invented employer, a page that
+stops short. No test framework, no dependencies beyond the tool itself.
+
 ## Verification
 
 `verify_cv.py` fails on a page count over the limit, a PDF with no extractable

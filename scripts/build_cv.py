@@ -207,6 +207,8 @@ def main():
                     help="skip the pass that opens the rhythm to fill a short page")
     ap.add_argument("--no-restore", action="store_true", help="skip the pass that walks dropped items back in")
     ap.add_argument("--keep-typ", action="store_true")
+    ap.add_argument("--preview", action="store_true",
+                    help="also write a PNG of page one next to the PDF, for looking at the result")
     a = ap.parse_args()
 
     for tool in ("typst", "pdfinfo"):
@@ -287,6 +289,12 @@ def main():
     if cfg:
         print("kind: %s" % cfg["label"])
         print("  leads with: %s" % cfg["lead_with"])
+    if a.preview and shutil.which("pdftoppm"):
+        stem = out.with_suffix("")
+        subprocess.run(["pdftoppm", "-png", "-r", "110", "-singlefile", "-f", "1", "-l", "1",
+                        str(out), str(stem)], capture_output=True)
+        print("preview: %s.png" % stem)
+
     print("%s  %d page(s)" % (out, pages))
     if fill is not None:
         bar = "#" * int(round(fill * 30))
