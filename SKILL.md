@@ -181,4 +181,4 @@ rubric item that is not a 2 and why. If the fit is weak, say weak.
 - `examples/`: three fictional people. `ada-lovelace.yaml` is the commented
   master profile; `ada-lovelace.northwind.yaml` is her tailored to
   `posting-northwind.json`; `tomas-rivera.yaml` is a student with no roles
-- `tests/run.py`: the evals; green means the pipeline works on this machine
+- `tests/run.py`: the evals, `python3 tests/run.py`; green means the pipeline works on this machine
