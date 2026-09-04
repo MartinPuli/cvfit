@@ -12,8 +12,11 @@
 //   Leading is 0.5em and the gap between bullets is 4pt, deliberately larger.
 //   Lines wrapped inside one bullet must sit closer together than two separate
 //   bullets do, or the list stops reading as a list.
-//   Vertical rhythm runs 3pt inside an entry, 7pt between entries and 16pt
-//   between sections, all scaled by `rhythm`. build_cv.py raises that multiplier
+//   Hierarchy, largest to smallest: 18pt between sections, 8pt after the
+//   summary (it belongs to the header block, not to a section), 8pt from a section rule to its content, 7pt between entries,
+//   3pt from a subtitle to its bullets, 1pt from a title to its subtitle. A
+//   heading has to sit closer to what follows it than to what precedes it, or
+//   it reads as belonging to the previous section, all scaled by `rhythm`. build_cv.py raises that multiplier
 //   after the content is settled, so a page that would end two inches short gets
 //   the room back as air rather than leaving a hole under the last line. The ratio is what carries hierarchy: a section break has to
 //   read as clearly bigger than an entry break or the page turns into one list.
@@ -29,7 +32,7 @@
 // under its rule than every titled entry, and neither a negative v() nor an
 // empty grid could pull it back. Zeroing the implicit spacing and owning it
 // with one constant brings all sections within 0.5pt of each other.
-#let SECTION_GAP = 19pt
+#let SECTION_GAP = 8pt
 
 #let cv(
   name: "",
@@ -56,16 +59,16 @@
     // No heading. A labelled "Summary" costs a line and tells the reader nothing
     // they cannot see. The paragraph sits where the eye already lands first.
     set par(justify: false, leading: 0.55em)
-    text(size: size)[#summary]
-    v(3pt * rhythm)
+    block(above: 0pt, below: 0pt)[#text(size: size)[#summary]]
+    v(8pt * rhythm)
   } else {
     v(9pt * rhythm)
   }
 
   for (si, s) in sections.enumerate() {
-    if si > 0 { v(16pt * rhythm) }
+    if si > 0 { v(18pt * rhythm) }
     text(size: size + 0.5pt, weight: "bold", tracking: 1pt)[#upper(s.heading)]
-    v(2pt * rhythm)
+    v(3pt * rhythm)
     block(above: 0pt, below: 0pt)[#line(length: 100%, stroke: 0.7pt + black)]
     v(SECTION_GAP * rhythm)
 
@@ -80,8 +83,9 @@
         )]
       }
       if e.subtitle != "" or e.meta != "" {
-        // explicit, since the title block above has below: 0pt
-        v(3.5pt * rhythm)
+        // explicit, since the title block above has below: 0pt. Title and
+        // subtitle are one unit, so this is the tightest gap on the page.
+        v(1pt * rhythm)
         grid(
           columns: (1fr, auto),
           align: (left, right),
