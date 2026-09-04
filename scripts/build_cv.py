@@ -44,6 +44,29 @@ def apply_kind(p, kind):
         return len(order)
 
     p["sections"].sort(key=rank)
+
+    # Caps: someone with a lot to tell still gets one page. Keep the top N
+    # entries per section and top M bullets per entry, by priority, and say
+    # what was left out. This runs before the fitter so the fitter starts from
+    # an already editorial selection rather than from everything.
+    capped = []
+    for sec in p["sections"]:
+        for key, (max_e, max_b) in cfg.get("caps", {}).items():
+            hl, kl = sec["heading"].lower(), key.lower()
+            if not (kl in hl or hl in kl):
+                continue
+            ranked = sorted(sec["entries"], key=lambda e: -e["priority"])
+            for e in ranked[max_e:]:
+                capped.append("entry: %s: %s" % (sec["heading"], e["title"]))
+            sec["entries"] = [e for e in sec["entries"] if e in ranked[:max_e]]
+            for e in sec["entries"]:
+                if len(e["bullets"]) > max_b:
+                    keep = sorted(e["bullets"], key=lambda b: -b["priority"])[:max_b]
+                    for b in e["bullets"]:
+                        if b not in keep:
+                            capped.append("bullet: %s: %s" % (e["title"], b["text"][:56]))
+                    e["bullets"] = [b for b in e["bullets"] if b in keep]
+    cfg["_capped"] = capped
     for sec in p["sections"]:
         delta = 0
         for key, val in cfg.get("boost", {}).items():
@@ -310,6 +333,10 @@ def main():
     if cfg:
         print("kind: %s" % cfg["label"])
         print("  leads with: %s" % cfg["lead_with"])
+        if cfg.get("_capped"):
+            print("  caps left out %d item(s) (still in the master profile):" % len(cfg["_capped"]))
+            for c in cfg["_capped"]:
+                print("    - " + c)
     if a.preview and shutil.which("pdftoppm"):
         stem = out.with_suffix("")
         subprocess.run(["pdftoppm", "-png", "-r", "110", "-singlefile", "-f", "1", "-l", "1",

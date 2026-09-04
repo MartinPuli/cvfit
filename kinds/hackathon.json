@@ -23,5 +23,28 @@
   ],
   "notes": "Organisers read an application in seconds and admit thousands. They are filtering for people who ship something in 36 hours and do not vanish on Sunday night. Ranked results with denominators, working links and evidence a past project outlived its event beat any job title. Include projects that are running now, not the most technically impressive dead one.",
   "summary": false,
-  "summary_note": "Off. Organisers and committees skim for evidence, not positioning, and a career summary costs three lines that a working link or a ranked result uses better."
+  "summary_note": "Off. Organisers and committees skim for evidence, not positioning, and a career summary costs three lines that a working link or a ranked result uses better.",
+  "caps": {
+    "Projects": [
+      5,
+      2
+    ],
+    "Hackathons": [
+      6,
+      1
+    ],
+    "Experience": [
+      2,
+      1
+    ],
+    "Leadership and Activities": [
+      2,
+      1
+    ],
+    "Education": [
+      1,
+      1
+    ]
+  },
+  "caps_note": "Per section: [max entries, max bullets per entry]. Applied by priority before fitting. The rest stays in the master profile; nothing is lost, it is just not on this page."
 }

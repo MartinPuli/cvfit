@@ -1,0 +1,69 @@
+# Tailoring: from a posting and a person to one page
+
+This is the judgement step. The code cannot do it and should not pretend to.
+It is written as a procedure so it is done the same way every time and so the
+result can be explained.
+
+## 1. Score the posting
+
+From `target.json`, list the must-haves and the responsibilities. Give each a
+weight: 3 if the posting repeats it or puts it first, 2 if it is stated once as
+a requirement, 1 if it is a nice-to-have. Ten to fifteen items is normal.
+
+## 2. Score every bullet and entry against that list
+
+For each bullet in the master profile, note which posting items it is genuine
+evidence for. Not "could be spun as", but evidence a hiring manager would accept
+in an interview. Sum the weights. That number, scaled to 40 to 100, becomes the
+bullet's `priority`. Entries take the max of their bullets, plus 5 if the
+organisation is one the reader will recognise.
+
+A bullet that matches nothing keeps its default and will be the first thing the
+fitter drops. That is correct.
+
+## 3. Decide the shape
+
+| The person has | Shape |
+|---|---|
+| Two or more roles and side projects | Standard: Experience, Projects, Education, Skills |
+| Roles, no projects | Drop Projects. Three bullets per role; the depth has to come from the work |
+| Projects, no roles (student, self-taught, career changer) | Education first, then Projects with up to two bullets each, then Skills, then Leadership. The summary leads with what was built and shipped, never with what is missing |
+| Neither, only study | Education with coursework and awards as entries, Leadership, Skills. Say in the report that the page is thin and name the one thing that would fix it (a shipped project with a link) |
+| Far more than fits | Caps by kind trim to the top N by priority; the rest stays in the master. Nothing is deleted, it is just not on this page |
+
+Never fake a section. An empty heading, a "Projects" entry that is a tutorial
+follow-along, or an "Experience" entry that was a two-week unpaid trial all read
+as exactly what they are.
+
+## 4. Order by the kind, then cut
+
+`kinds/*.json` sets section order, priority shifts and caps. Apply the kind, then
+read the effective profile the builder writes and ask of every remaining line:
+would the hiring manager for this posting miss it? If not, cut it by hand rather
+than leaving it to the fitter.
+
+## 5. Write to the posting's vocabulary, honestly
+
+Where the work is real, use the posting's words for it. "Integrated an agentic
+testing pipeline into CI/CD" for a posting that says CI/CD, not "automated
+testing in the build". Where the work is not real, the word does not go in.
+`match_report.py` lists which posting keywords reached the page; every uncovered
+one is a question, "is there real work behind this", and the default answer is
+no.
+
+## 6. Rewrite the summary last
+
+It is the most posting-sensitive text on the page and it should be written after
+the selection is settled, not before. Name the role in the reader's own words,
+then the one result that proves it. Two or three lines. Only for `kind: job`.
+
+## Worked example
+
+`examples/target.canals.json` and `examples/profile.martin-canals.json` are a
+real posting and a real tailoring. The posting asked for a senior security
+engineer; the candidate is a backend engineer who built one security product.
+The tailoring created a *Security Projects* section and led with it, reframed
+banking work as production systems handling money, used the posting's words
+"CI/CD" and "production systems" where the work backed them, and left "threat
+modeling" and "incident response" off the page because nothing backed them. The
+fit assessment says partial. That is the whole method.

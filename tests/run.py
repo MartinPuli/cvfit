@@ -157,6 +157,20 @@ def main():
         check("yaml and json examples render the same text",
               text(out / "y.pdf").split() == text(out / "ex.pdf").split())
 
+        print("caps")
+        big = json.loads((EX / "profile.martin-master.json").read_text())
+        for sec in big["sections"]:
+            if sec["heading"] == "Experience":
+                for e in sec["entries"]:
+                    e["bullets"] = e["bullets"] + [{"text": "Extra bullet %d for cap testing." % i, "priority": 10} for i in range(4)]
+        (out / "big.json").write_text(json.dumps(big))
+        code, log = run(BUILD, out / "big.json", "-o", out / "big.pdf", "--kind", "job")
+        eff = json.loads((out / "big.profile.json").read_text())
+        exp = [x for x in eff["sections"] if x["heading"] == "Experience"][0]
+        check("caps limit bullets per entry (job: 3)", all(len(e["bullets"]) <= 3 for e in exp["entries"]), str([len(e["bullets"]) for e in exp["entries"]]))
+        check("caps report what they left out", "caps left out" in log and "Extra bullet" in log, log[-300:])
+        check("low-priority extras are the ones capped", not any("Extra bullet" in b["text"] for e in exp["entries"] for b in e["bullets"]))
+
         print("keyword report")
         code, log = run(MATCH, out / "k-job.pdf", "--target", EX / "target.canals.json")
         check("match report runs", code == 0 and "covered" in log, log[-200:])

@@ -22,5 +22,28 @@
   ],
   "notes": "Selection committees compare candidates against each other, so a rank means more than a description. '1st of 151' carries weight that 'won a hackathon' does not. They also look for a line through the record rather than a pile of unrelated wins, so order the evidence to show direction. Leadership counts here in a way it does not for a job.",
   "summary": false,
-  "summary_note": "Off. Organisers and committees skim for evidence, not positioning, and a career summary costs three lines that a working link or a ranked result uses better."
+  "summary_note": "Off. Organisers and committees skim for evidence, not positioning, and a career summary costs three lines that a working link or a ranked result uses better.",
+  "caps": {
+    "Awards": [
+      6,
+      1
+    ],
+    "Projects": [
+      3,
+      1
+    ],
+    "Experience": [
+      2,
+      1
+    ],
+    "Leadership and Activities": [
+      3,
+      1
+    ],
+    "Education": [
+      2,
+      2
+    ]
+  },
+  "caps_note": "Per section: [max entries, max bullets per entry]. Applied by priority before fitting. The rest stays in the master profile; nothing is lost, it is just not on this page."
 }

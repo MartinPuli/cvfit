@@ -134,6 +134,21 @@ stops short. No test framework, no dependencies beyond the tool itself.
 text layer, a missing name or section heading, first-person pronouns, or em dashes.
 Exit code is non-zero, so it works as a pre-send gate or a CI step.
 
+## Caps
+
+Someone with a lot to tell still gets one page. Each kind sets caps, `[max
+entries, max bullets per entry]` per section, applied by priority before fitting.
+What the caps leave out is printed and stays in the master profile; nothing is
+deleted, it is just not on this page.
+
+## Shape
+
+The skill decides the shape from what the person actually has: standard for
+roles plus projects, no Projects section for roles alone, Education and Projects
+leading for a student with no roles, and an honest "this page is thin" for
+someone with only study. It never fakes a section. `references/tailoring.md`
+has the table.
+
 ## Summary line
 
 `kind: job` renders two or three lines under the contact block, no heading. It is
