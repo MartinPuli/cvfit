@@ -13,8 +13,8 @@
 //   Lines wrapped inside one bullet must sit closer together than two separate
 //   bullets do, or the list stops reading as a list.
 //   Hierarchy, largest to smallest: 18pt between sections, 8pt after the
-//   summary (it belongs to the header block, not to a section), 8pt from a section rule to its content, 7pt between entries,
-//   3pt from a subtitle to its bullets, 1pt from a title to its subtitle. A
+//   summary (it belongs to the header block, not to a section), 11pt from a section rule to its content, 7pt between entries,
+//   3pt from a subtitle to its bullets, 2.5pt from a title to its subtitle. A
 //   heading has to sit closer to what follows it than to what precedes it, or
 //   it reads as belonging to the previous section, all scaled by `rhythm`. build_cv.py raises that multiplier
 //   after the content is settled, so a page that would end two inches short gets
@@ -32,7 +32,7 @@
 // under its rule than every titled entry, and neither a negative v() nor an
 // empty grid could pull it back. Zeroing the implicit spacing and owning it
 // with one constant brings all sections within 0.5pt of each other.
-#let SECTION_GAP = 8pt
+#let SECTION_GAP = 11pt
 
 #let cv(
   name: "",
@@ -84,8 +84,9 @@
       }
       if e.subtitle != "" or e.meta != "" {
         // explicit, since the title block above has below: 0pt. Title and
-        // subtitle are one unit, so this is the tightest gap on the page.
-        v(1pt * rhythm)
+        // subtitle are one unit, so this is the tightest gap on the page,
+        // but 1pt let the italic ascenders touch the title baseline.
+        v(2.5pt * rhythm)
         grid(
           columns: (1fr, auto),
           align: (left, right),
