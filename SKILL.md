@@ -72,6 +72,11 @@ Copy the master profile, then for this specific posting:
 - **Reorder and rewrite bullets** so the ones matching the posting's language come first. Use the posting's vocabulary only where the work genuinely matches it.
 - **Set priorities.** Every bullet and entry takes `priority` (higher survives). This is what the fitter uses when the content does not fit.
 - **Cut.** A tailored resume is shorter than the master, not longer.
+- **Name what the reader will not recognise.** An employer, university or client
+  that means nothing to the person reading is a wasted line. Say what it is:
+  `Script S.A. (BBVA, Volkswagen Financial Services)` rather than `Script S.A.`
+  See `references/recognition.md`; this is the most common failure in
+  cross-border applications and the cheapest to fix.
 
 Bullet rules: start with a past-tense verb, no first-person pronouns, name the domain and the stakes, use digits, and put the outcome in the same sentence as the action. `verify_cv.py` rejects pronouns and em dashes.
 
@@ -116,5 +121,7 @@ Hand over the PDF and say, in this order: what was dropped to make it fit, where
 ## Reference
 
 `references/harvard-format.md` has the format rules the template implements.
+`references/recognition.md` covers writing for a reader who has never heard of
+your employer, which is most of the problem when applying across a border.
 `schema/profile.schema.json` documents every field.
 `examples/` has a generic profile and a real worked example: a backend engineer applying to a senior security role, where the fit is partial and the assessment says so.

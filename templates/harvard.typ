@@ -19,6 +19,8 @@
 //   than under the bullet. A par hanging-indent reads cleaner in source but does
 //   not survive into the block, which is why the grid stays.
 
+#let date-grey = rgb("#5a5a5a")
+
 #let cv(
   name: "",
   contact: (),
@@ -53,7 +55,7 @@
           columns: (1fr, auto),
           align: (left, right),
           text(weight: "bold")[#e.title],
-          text(style: "italic", size: size - 0.5pt)[#e.date],
+          text(style: "italic", size: size - 0.5pt, fill: date-grey)[#e.date],
         )
       }
       if e.subtitle != "" or e.meta != "" {
@@ -62,7 +64,7 @@
           columns: (1fr, auto),
           align: (left, right),
           text(style: "italic")[#e.subtitle],
-          text(style: "italic", size: size - 0.5pt)[#e.meta],
+          text(style: "italic", size: size - 0.5pt, fill: date-grey)[#e.meta],
         )
       }
       if e.bullets.len() > 0 {

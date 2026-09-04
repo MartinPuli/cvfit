@@ -149,6 +149,13 @@ a score is a target and Goodhart applies to resumes too.
 [JSON Resume](https://jsonresume.org) is the closest thing to a standard schema
 and is worth supporting as an import path.
 
+[silver-dev-cv](https://typst.app/universe/package/silver-dev-cv) is a Typst CV
+template written by a recruiter who places LatAm engineers in US startups. It
+defaults to Times New Roman, which the font measurement here arrived at
+independently, and its parent blog supplies `references/recognition.md`: when the
+reader has never heard of your employer, pedigree is worth nothing and impact,
+tenure and clarity have to carry the page.
+
 The immutable-field guard came from a JSON Resume tailoring service that protects
 fields from being rewritten. It is the one idea in this list that turns an honesty
 rule into a failing test, which is why it is here.
