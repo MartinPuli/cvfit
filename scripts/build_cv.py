@@ -106,6 +106,8 @@ def view(p, dropped):
 
 
 def to_typst(v, font, size, margin):
+    fonts = "(" + ", ".join('"%s"' % esc_str(f.strip()) for f in str(font).split(",")) + ")"
+
     def arr(items):
         return "(" + ", ".join(items) + ("," if len(items) == 1 else "") + ")"
 
@@ -121,8 +123,8 @@ def to_typst(v, font, size, margin):
         secs.append("(heading: [%s], entries: %s)" % (esc(s["heading"]), arr(entries)))
     contact = arr(["[" + esc(c) + "]" for c in v.get("contact", [])])
     return (TEMPLATE.read_text()
-            + '\n#cv(name: "%s", contact: %s, sections: %s, font: "%s", size: %s, margin: %s)\n'
-            % (esc_str(v["name"]), contact, arr(secs), font, size, margin))
+            + '\n#cv(name: "%s", contact: %s, sections: %s, font: %s, size: %s, margin: %s)\n'
+            % (esc_str(v["name"]), contact, arr(secs), fonts, size, margin))
 
 
 def compile_pdf(src, out):
@@ -148,7 +150,8 @@ def candidates(p, dropped):
                 continue
             live = [b for b in e["bullets"] if b["id"] not in dropped]
             for b in live:
-                out.append((b["priority"], 0, b["id"], "bullet", "%s: %s" % (e["title"], b["text"][:56])))
+                out.append((b["priority"], 0, b["id"], "bullet",
+                            "%s: %s" % (e["title"] or s["heading"], b["text"][:56])))
             if not e["bullets"]:
                 out.append((e["priority"], 1, e["id"], "entry", "%s: %s" % (s["heading"], e["title"])))
     return sorted(out)
@@ -159,9 +162,10 @@ def main():
     ap.add_argument("profile")
     ap.add_argument("-o", "--out", default="out/cv.pdf")
     ap.add_argument("--max-pages", type=int, default=1)
-    ap.add_argument("--font", default="New Computer Modern")
+    ap.add_argument("--font", default="Charter,Georgia,Times New Roman",
+                    help="comma-separated fallback chain")
     ap.add_argument("--size", default="10.5pt")
-    ap.add_argument("--margin", default="0.5in")
+    ap.add_argument("--margin", default="0.55in")
     ap.add_argument("--kind", help="job | hackathon | competition. Reorders sections and shifts what the fitter drops first.")
     ap.add_argument("--no-restore", action="store_true", help="skip the pass that walks dropped items back in")
     ap.add_argument("--keep-typ", action="store_true")
