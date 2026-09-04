@@ -12,7 +12,7 @@
 //   Leading is 0.5em and the gap between bullets is 4pt, deliberately larger.
 //   Lines wrapped inside one bullet must sit closer together than two separate
 //   bullets do, or the list stops reading as a list.
-//   Vertical rhythm runs 3pt inside an entry, 7pt between entries and 13pt
+//   Vertical rhythm runs 3pt inside an entry, 7pt between entries and 16pt
 //   between sections, all scaled by `rhythm`. build_cv.py raises that multiplier
 //   after the content is settled, so a page that would end two inches short gets
 //   the room back as air rather than leaving a hole under the last line. The ratio is what carries hierarchy: a section break has to
@@ -29,7 +29,7 @@
 // under its rule than every titled entry, and neither a negative v() nor an
 // empty grid could pull it back. Zeroing the implicit spacing and owning it
 // with one constant brings all sections within 0.5pt of each other.
-#let SECTION_GAP = 16pt
+#let SECTION_GAP = 19pt
 
 #let cv(
   name: "",
@@ -63,7 +63,7 @@
   }
 
   for (si, s) in sections.enumerate() {
-    if si > 0 { v(13pt * rhythm) }
+    if si > 0 { v(16pt * rhythm) }
     text(size: size + 0.5pt, weight: "bold", tracking: 1pt)[#upper(s.heading)]
     v(2pt * rhythm)
     block(above: 0pt, below: 0pt)[#line(length: 100%, stroke: 0.7pt + black)]
@@ -93,7 +93,7 @@
       // scans a skills block by label; an ATS reads it as plain lines.
       if e.items.len() > 0 {
         for (ii, it) in e.items.enumerate() {
-          if ii > 0 { v(4pt * rhythm) }   // wider than the leading, or wrapped lines read closer than separate items
+          if ii > 0 { v(7pt * rhythm) }   // well past the leading: each labelled line has to read as its own row
           block(above: 0pt, below: 0pt)[#grid(columns: (1fr,), [#strong(it.label): #it.text])]
         }
       }
