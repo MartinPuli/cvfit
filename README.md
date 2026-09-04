@@ -1,90 +1,114 @@
 # cvfit
 
-Give it a job posting and whatever career material you already have. It writes
-a one-page resume aimed at that posting, in the Harvard format, and refuses to
-hand it over if the result fails its checks.
+Point it at a job posting, give it whatever you've got about yourself, and it
+writes a one-page resume aimed at that posting. Then it checks the result and
+won't hand it over if something's wrong.
 
-It is a [Claude Code](https://claude.com/claude-code) skill: `SKILL.md` is the
-judgement, written down. The two scripts render and gate, and run from any shell.
+It's a [Claude Code](https://claude.com/claude-code) skill. `SKILL.md` is the
+judgement, written down so it's done the same way every time. The two scripts do
+the part that shouldn't be improvised: rendering and checking.
 
-## Why
+## The idea
 
-The model decides what goes on the page, because that is judgement. The code
-decides how it looks and whether it may ship, because that is not.
+A model should decide what goes on the page, because that's judgement and nobody
+has automated it well. Code should decide how the page looks and whether it's
+allowed to ship, because those are the parts where improvising costs you.
 
-Every bullet carries a priority. When the page overflows, the lowest go first,
-then the tool walks them back in from the top and keeps what fits. Everything it
-removed is printed. When the page is short it says how many lines are missing
-and refuses to stretch whitespace over the gap. A guard fails the build if
-tailoring moved a date, grew a title or invented an employer: tailoring may
-choose and reorder, it may not promote anyone.
+So every bullet in your profile carries a priority. When the page overflows, the
+lowest ones go first; then the tool walks the dropped ones back in from the top
+and keeps whatever still fits. It prints every drop. When the page comes up short
+it tells you how many lines are missing and won't stretch the whitespace to hide
+it, since a page that's 41% full with big gaps reads worse than one that's
+honestly short.
+
+And there's a guard. If tailoring moved a date, grew a job title, or added an
+employer that isn't in your master profile, the build fails. Tailoring gets to
+choose and reorder. It doesn't get to promote you.
 
 ## Install
 
-Python 3.9+, [Typst](https://typst.app), poppler (`pdfinfo`, `pdftotext`), pyyaml.
+You need Python 3.9 or newer, [Typst](https://typst.app), poppler for `pdfinfo`
+and `pdftotext`, and pyyaml.
 
 ```bash
-brew install typst poppler && pip install pyyaml      # macOS
+brew install typst poppler && pip install pyyaml
 git clone https://github.com/MartinPuli/cvfit.git
 ```
 
-As a skill, copy the repo into `~/.claude/skills/cvfit/`.
+To use it as a skill, copy the repo into `~/.claude/skills/cvfit/`.
 
-## Use
+## Two commands
 
 ```bash
 python3 scripts/build_cv.py examples/ada-lovelace.northwind.yaml -o out/cv.pdf --kind job --preview
 python3 scripts/verify_cv.py out/cv.pdf --profile out/cv.profile.json --master examples/ada-lovelace.yaml --target examples/posting-northwind.json
 ```
 
-`build` writes the PDF, a PNG of page one, and the effective profile (what
-actually landed on the page). `verify` exits non-zero if anything is wrong.
-`python3 tests/run.py` runs the evals.
+Build writes the PDF, a PNG of page one so you can actually look at it, and the
+effective profile: what landed on the page after caps and fitting. Verify exits
+non-zero when anything's off. `python3 tests/run.py` runs the checks.
 
 ## The file you edit
 
-One YAML per person. `examples/ada-lovelace.yaml` has a comment beside every
-field. Leave out any section you do not have; empty sections are dropped, never
-invented. Skills use `items`: a bold label and plain text.
+One YAML per person. Open `examples/ada-lovelace.yaml`; every field has a
+comment next to it. Don't have a section? Leave it out. Empty sections get
+dropped at render time and the tool never invents one. Skills go in `items`,
+which render as a bold label followed by plain text, so a person can scan them by
+label and an ATS reads them as ordinary lines.
 
 ## Kinds
 
-`--kind job | hackathon | competition`. Same career, three documents: a hiring
-manager wants to know if you have done the job, an organiser wants evidence a
-past project outlived its weekend, a committee compares ranks. `kinds.json`
-holds each one's section order, priority shifts, caps and reasoning. With no
-Experience section, Education leads whatever the kind.
+`--kind job`, `hackathon` or `competition`. Same career, three different
+documents, because a hiring manager wants to know whether you've done the job
+before, a hackathon organiser wants proof a past project survived past Sunday
+night, and a selection committee compares ranks. `kinds.json` has each one's
+section order, priority shifts, caps, and the reasoning in a `notes` field.
+
+If there's no Experience section at all, Education goes first no matter the
+kind. Projects above Education on a student's resume reads like hiding something.
 
 ## Language
 
 Write the profile in whatever language the resume should be in. Headings are
-recognised by alias (`Experiencia`, `Formación`, `Compétences`) so ordering and
-caps work the same, and the page keeps your wording. `verify_cv.py --lang es`
-switches the pronoun check. `examples/tomas-rivera.es.yaml` is the student
-example in Spanish.
+matched by alias (`Experiencia`, `Formación`, `Compétences` all count) so
+ordering and caps still work, and the page keeps the words you wrote.
+`verify_cv.py --lang es` swaps in the Spanish pronoun check.
+`examples/tomas-rivera.es.yaml` is the student example in Spanish.
 
 ## Format
 
-US Letter, 0.55in margins, Georgia 10.5pt with Palatino and Times New Roman as
-fallbacks (measured: Charter ran five lines longer). Single column, no tables,
-no graphics, so an ATS reads it as text. Name centred, one contact line,
-upper-case headings with a rule, dates right-aligned in grey. Spacing is
-explicit and measured; see the comments in `templates/harvard.typ`.
+US Letter, 0.55 inch margins, Georgia at 10.5pt with Palatino and Times New
+Roman behind it. Georgia wasn't the first pick. Charter was, until rendering the
+same profile in eight faces showed it running 63pt longer than Times, about five
+lines, which on a one-pager is a whole bullet. One column, no tables, no
+graphics, so an ATS gets plain text. Name centred, one contact line, upper-case
+headings with a rule under them, dates in grey on the right.
+
+The spacing is all explicit, and it took four tries to get there. Typst adds
+implicit spacing between blocks, and a section whose first entry had no title row
+(a skills list, say) sat 12pt lower under its rule than every other section. A
+negative `v()` did nothing; an empty grid did nothing. Zeroing every implicit gap
+and owning them with named constants is what finally worked. The numbers are in
+the comments in `templates/harvard.typ`.
 
 ## Examples
 
-Three fictional people. `ada-lovelace.yaml` is a standard master profile;
-`ada-lovelace.northwind.yaml` is her tailored to `posting-northwind.json`, dates
-and titles untouched; `tomas-rivera.yaml` is a student with no work history.
+Four files, three invented people. `ada-lovelace.yaml` is a standard master
+profile with roles and side projects. `ada-lovelace.northwind.yaml` is her
+tailored to `posting-northwind.json`, dates and titles untouched, which is what
+the guard checks. `tomas-rivera.yaml` is a student with no work history, and
+`tomas-rivera.es.yaml` is him in Spanish.
 
 ## Prior art
 
 [dabydat/resume-builder-skill](https://github.com/dabydat/resume-builder-skill)
-packages Harvard and ATS standards as prose for an agent; this adds the code.
-[RenderCV](https://github.com/rendercv/rendercv) is the better typesetter and
-does no tailoring. [Resume Forge](https://github.com/AjayLuhach/resume-forge)
-inspired the keyword coverage, minus the score.
-[silver-dev-cv](https://typst.app/universe/package/silver-dev-cv) and its parent
-blog supplied the rule in `TAILORING.md` about employers the reader will not know.
+packages the Harvard and ATS rules as prose for an agent; this adds the code.
+[RenderCV](https://github.com/rendercv/rendercv) is a far better typesetter and
+does no tailoring at all. [Resume Forge](https://github.com/AjayLuhach/resume-forge)
+is where the keyword coverage came from, minus the score, since a score turns
+into something people write toward.
+[silver-dev-cv](https://typst.app/universe/package/silver-dev-cv), by a
+recruiter who places Argentine engineers in US startups, and its parent blog
+supplied the rule in `TAILORING.md` about employers the reader has never heard of.
 
 MIT.

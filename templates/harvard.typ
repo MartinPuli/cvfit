@@ -26,7 +26,7 @@
 
 #let date-grey = rgb("#5a5a5a")
 
-// Every block element here is wrapped in block(above: 0pt, below: 0pt) and the
+// Every block here is wrapped in block(above: 0pt, below: 0pt) and the
 // gaps are explicit v() calls. Measured reason: with Typst's implicit block
 // spacing left on, an entry with no title row (a skills list) sat 12pt lower
 // under its rule than every titled entry, and neither a negative v() nor an

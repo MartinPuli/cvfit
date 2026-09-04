@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Evals for cvfit. No framework, no dependencies beyond the tool itself.
+"""Evals for cvfit. No test runner, no dependencies beyond the tool itself.
 
     python3 tests/run.py
 
@@ -148,6 +148,19 @@ def main():
         run(BUILD, out / "es-bad.json", "-o", out / "es-bad.pdf")
         code, log = run(VERIFY, out / "es-bad.pdf", "--lang", "es", "--min-fill", "0")
         check("spanish pronouns are rejected with --lang es", code != 0 and "pronoun" in log, log)
+
+        print("docs read like a person wrote them")
+        SLOP = ["delve", "leverage", "seamless", "robust", "cutting-edge", "innovative", "empower", "harness",
+                "streamline", "elevate", "unlock", "landscape", "journey", "tapestry", "realm", "paradigm",
+                "synergy", "testament", "moreover", "furthermore", "ultimately", "utilize", "facilitate",
+                "game-changer", "in today's", "it's worth noting", "at the end of the day", "first and foremost"]
+        for f in ("README.md", "SKILL.md", "TAILORING.md"):
+            body = (ROOT / f).read_text(); low = body.lower()
+            check(f + ": no em dashes", "\u2014" not in body)
+            hits = [w for w in SLOP if re.search(r"\b" + re.escape(w) + r"\b", low)]
+            check(f + ": no filler words", not hits, str(hits))
+            stiff = len(re.findall(r"\b(it is|does not|do not|cannot|is not|are not)\b", low))
+            check(f + ": contractions in use", stiff <= 3, "%d uncontracted forms" % stiff)
 
         print("keyword report")
         code, log = run(VERIFY, out / "tailored.pdf", "--profile", out / "tailored.profile.json", "--target", POSTING)

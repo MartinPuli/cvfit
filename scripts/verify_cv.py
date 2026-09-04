@@ -72,7 +72,7 @@ def main():
     if len(text.strip()) < 200:
         fails.append("text layer looks empty, an ATS would read nothing")
 
-    if "—" in text:
+    if "," in text:
         fails.append("em dash present; use commas, colons or semicolons")
 
     hits = sorted(set(re.findall(PRONOUNS[a.lang], text)))

@@ -1,6 +1,6 @@
 ---
 name: cvfit
-description: "Use when someone points at a job, hackathon, fellowship or program application and wants a resume for it. Triggers: a posting URL, a screenshot of a posting, pasted posting text, a company plus role name, or phrasings like 'adapt my CV to this', 'tailor my resume for this role', 'Harvard format resume', 'make a CV for this application', 'one-page resume'. The skill reads the posting, assembles the person's material from whatever exists (the conversation, an Obsidian vault, markdown notes, an old resume, public repos), decides the right shape for that person and that posting, renders a one-page Harvard-format PDF, and evaluates it against a rubric until it passes or the gap is explained. Do not use for cover letters, LinkedIn profiles or portfolio sites."
+description: "Use when someone points at a job, hackathon, fellowship or program application and wants a resume for it. Triggers: a posting URL, a screenshot of a posting, pasted posting text, a company plus role name, or phrasings like 'adapt my CV to this', 'tailor my resume for this role', 'Harvard format resume', 'make a CV for this application', 'one-page resume'. The skill reads the posting, assembles the person's material from whatever exists (the conversation, an Obsidian vault, markdown notes, an old resume, public repos), decides the right shape for that person and that posting, renders a one-page Harvard-format PDF, and evaluates it against a rubric until it passes or the gap is explained. Don't use for cover letters, LinkedIn profiles or portfolio sites."
 ---
 
 # cvfit
@@ -9,9 +9,9 @@ One posting and one person in; one page out, aimed at that posting, honest, and
 checked.
 
 The split that makes it work: **the model decides what goes on the page; the
-code decides how it looks and whether it may ship.** Judgement is not
-automatable and layout is not worth improvising. Everything below is the
-judgement, written down so it is done the same way every time.
+code decides how it looks and whether it may ship.** Judgement isn't
+automatable and layout isn't worth improvising. Everything below is the
+judgement, written down so it's done the same way every time.
 
 ```
 posting (url | screenshot | text) ──→ target.json ─────┐
@@ -50,7 +50,7 @@ must-haves quoted in the posting's own words, responsibilities, keywords, and
 - **partial**: real overlap on some must-haves, clear gaps on others
 - **weak**: the overlap is a stretch
 
-The assessment is written before tailoring, not after, so it cannot be talked
+The assessment is written before tailoring, not after, so it can't be talked
 into a better grade by a nicely worded page. A weak fit is reported as weak;
 applying anyway is the person's call.
 
@@ -79,9 +79,9 @@ template.
 | Only study | Education with coursework and awards as entries, Leadership, Skills. Report that the page is thin and name the one thing that would fix it |
 | Far more than fits | Caps by kind keep the top N by priority. The rest stays in the master; nothing is deleted |
 
-Never fake a section. A "Projects" entry that is a tutorial, an "Experience"
+Never fake a section. A "Projects" entry that's a tutorial, an "Experience"
 entry that was a two-week trial, an empty heading: each reads as exactly what
-it is. Three true sections beat five where two are padding.
+it's. Three true sections beat five where two are padding.
 
 ## Step 4: pick the kind and tailor to the position
 
@@ -100,7 +100,7 @@ Write to the posting's vocabulary where the work is real and nowhere else.
 ## Language
 
 The resume is written in whichever language the person asks for, and the same
-rules apply in all of them. What changes and what does not:
+rules apply in all of them. What changes and what doesn't:
 
 - **Headings** go in the target language (`Experiencia`, `Formación`,
   `Compétences`). The builder recognises them by alias for ordering, caps and
@@ -108,14 +108,14 @@ rules apply in all of them. What changes and what does not:
   headings are kept and simply not reordered.
 - **Dates**: the local convention, `2023 – Actualidad`, `2023 – Presente`,
   `2023 – Aujourd'hui`. Never mix languages inside one document.
-- **Proper nouns and technology names stay as they are.** `Spring Boot` is not
-  translated; `Universidad Nacional de Córdoba` is not translated into English
-  either, but what it is gets explained when the reader will not know it.
+- **Proper nouns and technology names stay as they are.** `Spring Boot` isn't
+  translated; `Universidad Nacional de Córdoba` isn't translated into English
+  either, but what it's gets explained when the reader won't know it.
 - **Pronouns**: fragments, no first person, in every language. Run
   `verify_cv.py --lang es` (or `pt`, `fr`) so the check uses the right words.
 - **The recognition rule works in reverse too.** A Spanish resume for a Spanish
   reader still has to say what an unknown foreign employer is.
-- Do not translate a finished English resume word for word. Write it in the
+- Don't translate a finished English resume word for word. Write it in the
   target language from the profile; the sentence rhythm is different and a
   literal translation reads as one.
 
@@ -126,9 +126,9 @@ rules apply in all of them. What changes and what does not:
 - Bullets: past-tense verb, what was built, the domain and stakes, the outcome,
   digits not words, no first-person pronouns, no period at the end. The verifier
   rejects pronouns and em dashes.
-- **Name what the reader will not recognise.** `Script S.A.` is a wasted line;
+- **Name what the reader won't recognise.** `Script S.A.` is a wasted line;
   `Script S.A. (BBVA, Volkswagen Financial Services)` is the fact that mattered.
-  `TAILORING.md` section 5 has the rule and its source; it is the most
+  `TAILORING.md` section 5 has the rule and its source; it's the most
   common failure in cross-border applications and the cheapest to fix.
 - Summary last, only for `kind: job`, two or three lines: the role in the
   reader's words, then the one result that proves it.
@@ -154,7 +154,7 @@ step 4 was too long; fix it there.
 Three checks, in this order, and the loop runs until all three pass or the
 failure is explained in the report.
 
-**Verify.** Non-zero exit means it does not ship.
+**Verify.** Non-zero exit means it doesn't ship.
 
 ```bash
 python3 scripts/verify_cv.py out/cv.pdf --profile out/cv.profile.json --master profile.yaml --target target.json --lang en
@@ -163,7 +163,7 @@ python3 scripts/verify_cv.py out/cv.pdf --profile out/cv.profile.json --master p
 `--master` is the guard that matters: it fails if tailoring moved a date, grew
 a title, or invented an entry. Tailoring may choose and reorder; it may not
 promote anyone. That rule is a test because asking a model in prose to stay
-honest is not enforcement.
+honest isn't enforcement.
 
 **Look.** Open `out/cv.png` and read it top to bottom as the recipient would.
 The checks catch what a program can catch. These are caught by looking:
@@ -183,7 +183,7 @@ The checks catch what a program can catch. These are caught by looking:
 | 2 | In the first ten seconds: name, a line that says what they are in the posting's terms, and one hard number, all above the fold |
 | 3 | Every must-have the person genuinely meets is on the page, in the posting's words |
 | 4 | Nothing on the page the person could not defend in an interview |
-| 5 | Every organisation the reader will not know says what it is |
+| 5 | Every organisation the reader won't know says what it's |
 | 6 | Section order matches the kind and the shape decision |
 | 7 | The visual list above is clean |
 | 8 | `verify_cv.py` exits 0 with `--master` |
@@ -195,8 +195,8 @@ look, score again. Two or three passes is normal.
 ## Step 8: deliver
 
 Hand over the PDF and say, in this order: what was capped or dropped and why,
-where the person genuinely matches the posting, where they do not, and any
-rubric item that is not a 2 and why. If the fit is weak, say weak.
+where the person genuinely matches the posting, where they don't, and any
+rubric item that isn't a 2 and why. If the fit is weak, say weak.
 
 ## Files
 
