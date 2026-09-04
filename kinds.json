@@ -1,0 +1,148 @@
+{
+  "job": {
+    "label": "Job application",
+    "section_order": [
+      "Experience",
+      "Projects",
+      "Education",
+      "Leadership and Activities",
+      "Skills and Interests"
+    ],
+    "boost": {
+      "Experience": 25,
+      "Projects": 10,
+      "Skills and Interests": 5,
+      "Hackathons": -25,
+      "Awards": -15,
+      "Leadership and Activities": -10
+    },
+    "student_note": "Move Education first when the candidate has under three years of full-time work.",
+    "lead_with": "Production work: what shipped, who depended on it, what it moved.",
+    "noise": [
+      "hackathon podium counts",
+      "GPA once there is real work history",
+      "community event attendance"
+    ],
+    "notes": "A hiring manager is asking one question: has this person done the job before, or the nearest thing to it. Tenure, domain and outcome beat volume of side projects. Name the industry and the stakes, because 'built a web app' and 'built payment paths for a bank' read as different jobs.",
+    "summary": true,
+    "summary_note": "Two or three lines under the contact block, rewritten per posting. It is the highest-leverage sentence on the page and the most posting-sensitive: name the role being applied for in the reader's own words, then the single result that proves it.",
+    "caps": {
+      "Experience": [
+        4,
+        3
+      ],
+      "Projects": [
+        3,
+        1
+      ],
+      "Leadership and Activities": [
+        2,
+        1
+      ],
+      "Education": [
+        2,
+        1
+      ]
+    },
+    "caps_note": "Per section: [max entries, max bullets per entry]. Applied by priority before fitting. The rest stays in the master profile; nothing is lost, it is just not on this page."
+  },
+  "hackathon": {
+    "label": "Hackathon application",
+    "section_order": [
+      "Hackathons",
+      "Projects",
+      "Experience",
+      "Education",
+      "Leadership and Activities",
+      "Skills and Interests"
+    ],
+    "boost": {
+      "Hackathons": 30,
+      "Projects": 20,
+      "Leadership and Activities": 5,
+      "Experience": -10,
+      "Education": -10
+    },
+    "lead_with": "Competition record with denominators, then things that are live and clickable.",
+    "noise": [
+      "long employment bullets",
+      "GPA",
+      "enterprise process detail"
+    ],
+    "notes": "Organisers read an application in seconds and admit thousands. They are filtering for people who ship something in 36 hours and do not vanish on Sunday night. Ranked results with denominators, working links and evidence a past project outlived its event beat any job title. Include projects that are running now, not the most technically impressive dead one.",
+    "summary": false,
+    "summary_note": "Off. Organisers and committees skim for evidence, not positioning, and a career summary costs three lines that a working link or a ranked result uses better.",
+    "caps": {
+      "Projects": [
+        5,
+        2
+      ],
+      "Hackathons": [
+        6,
+        1
+      ],
+      "Experience": [
+        2,
+        1
+      ],
+      "Leadership and Activities": [
+        2,
+        1
+      ],
+      "Education": [
+        1,
+        1
+      ]
+    },
+    "caps_note": "Per section: [max entries, max bullets per entry]. Applied by priority before fitting. The rest stays in the master profile; nothing is lost, it is just not on this page."
+  },
+  "competition": {
+    "label": "Competition, scholarship, fellowship or residency",
+    "section_order": [
+      "Awards",
+      "Education",
+      "Projects",
+      "Experience",
+      "Leadership and Activities",
+      "Skills and Interests"
+    ],
+    "boost": {
+      "Awards": 30,
+      "Education": 20,
+      "Projects": 10,
+      "Leadership and Activities": 10,
+      "Experience": -5
+    },
+    "lead_with": "Ranked results against a named field, then academic record, then trajectory.",
+    "noise": [
+      "stack minutiae",
+      "internal tooling nobody outside the company knows"
+    ],
+    "notes": "Selection committees compare candidates against each other, so a rank means more than a description. '1st of 151' carries weight that 'won a hackathon' does not. They also look for a line through the record rather than a pile of unrelated wins, so order the evidence to show direction. Leadership counts here in a way it does not for a job.",
+    "summary": false,
+    "summary_note": "Off. Organisers and committees skim for evidence, not positioning, and a career summary costs three lines that a working link or a ranked result uses better.",
+    "caps": {
+      "Awards": [
+        6,
+        1
+      ],
+      "Projects": [
+        3,
+        1
+      ],
+      "Experience": [
+        2,
+        1
+      ],
+      "Leadership and Activities": [
+        3,
+        1
+      ],
+      "Education": [
+        2,
+        2
+      ]
+    },
+    "caps_note": "Per section: [max entries, max bullets per entry]. Applied by priority before fitting. The rest stays in the master profile; nothing is lost, it is just not on this page."
+  }
+}

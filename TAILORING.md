@@ -37,7 +37,7 @@ as exactly what they are.
 
 ## 4. Order by the kind, then cut
 
-`kinds/*.json` sets section order, priority shifts and caps. Apply the kind, then
+`kinds.json` sets section order, priority shifts and caps. Apply the kind, then
 read the effective profile the builder writes and ask of every remaining line:
 would the hiring manager for this posting miss it? If not, cut it by hand rather
 than leaving it to the fitter.
@@ -63,7 +63,7 @@ Source: [The No-BS Guide to Hiring LatAm Engineers](https://blog.silver.dev/2025
 Where the work is real, use the posting's words for it. "Integrated an agentic
 testing pipeline into CI/CD" for a posting that says CI/CD, not "automated
 testing in the build". Where the work is not real, the word does not go in.
-`match_report.py` lists which posting keywords reached the page; every uncovered
+`verify_cv.py --target` lists which posting keywords reached the page; every uncovered
 one is a question, "is there real work behind this", and the default answer is
 no.
 

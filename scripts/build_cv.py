@@ -15,7 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE = ROOT / "templates" / "harvard.typ"
-KINDS = ROOT / "kinds"
+KINDS = ROOT / "kinds.json"
 
 
 def apply_kind(p, kind):
@@ -25,11 +25,10 @@ def apply_kind(p, kind):
     The order decides what a skimming reader sees first; the boost decides what
     the fitter sacrifices when the page runs out.
     """
-    f = KINDS / (kind + ".json")
-    if not f.exists():
-        sys.exit("unknown kind: %s (have: %s)"
-                 % (kind, ", ".join(sorted(x.stem for x in KINDS.glob("*.json")))))
-    cfg = json.loads(f.read_text())
+    allk = json.loads(KINDS.read_text())
+    if kind not in allk:
+        sys.exit("unknown kind: %s (have: %s)" % (kind, ", ".join(sorted(allk))))
+    cfg = allk[kind]
     # A hiring manager reads a summary; a hackathon organiser skips it and looks
     # for links. The kind decides, not the profile.
     if not cfg.get("summary", False):

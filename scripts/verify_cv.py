@@ -3,9 +3,12 @@
 
     python3 scripts/verify_cv.py out/cv.pdf --profile profile.json --max-pages 1
 
-Checks page count, that the text layer is extractable (ATS can read it), that
-the name and every section heading survived rendering, and that the prose has
-no first-person pronouns or em dashes. Exits non-zero on any failure.
+Checks page count and fill, that the text layer is extractable (an ATS reads
+it), that the name and every section heading survived rendering, and that the
+prose has no first-person pronouns or em dashes. With --master, fails if
+tailoring moved a date, grew a title or invented an entry. With --target,
+also lists which of the posting's keywords reached the page. Exits non-zero
+on any failure.
 """
 import argparse, json, re, subprocess, sys
 from pathlib import Path
@@ -28,6 +31,7 @@ def main():
     ap.add_argument("--max-pages", type=int, default=1)
     ap.add_argument("--min-fill", type=float, default=0.75,
                     help="fail when the content uses less of the page than this")
+    ap.add_argument("--target", help="posting json: also report which of its keywords reached the page")
     ap.add_argument("--master", help="the untailored profile. Fails if tailoring changed a date or title, or invented an entry.")
     a = ap.parse_args()
 
@@ -101,6 +105,21 @@ def main():
                     fails.append("date changed for %s: %r became %r" % (e["title"], d0, e.get("date", "")))
                 if e.get("subtitle", "") != sub0:
                     fails.append("title changed for %s: %r became %r" % (e["title"], sub0, e.get("subtitle", "")))
+
+    if a.target:
+        # Coverage, not a score. A number invites writing to the keyword list
+        # instead of to the truth; every uncovered word is a question, "is
+        # there real work behind this", and the default answer is no.
+        tg = json.loads(Path(a.target).read_text())
+        flat = re.sub(r"\s+", " ", text).lower()
+        kws = tg.get("keywords", [])
+        hit = [k for k in kws if k.lower() in flat]
+        print("posting: %s, %s" % (tg.get("company", "?"), tg.get("role", "?")))
+        print("keywords on the page: %d of %d" % (len(hit), len(kws)))
+        for k in kws:
+            print("  %s  %s" % ("yes" if k in hit else "no ", k))
+        if tg.get("honest_fit_assessment"):
+            print("fit assessment on file: %s" % tg["honest_fit_assessment"])
 
     print("pages: %d" % pages)
     if fill is not None:

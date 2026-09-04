@@ -12,7 +12,7 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
-BUILD, VERIFY, MATCH = (ROOT / "scripts" / n for n in ("build_cv.py", "verify_cv.py", "match_report.py"))
+BUILD, VERIFY = (ROOT / "scripts" / n for n in ("build_cv.py", "verify_cv.py"))
 EX = ROOT / "examples"
 ADA, ADA_NW, TOMAS, POSTING = (EX / n for n in
     ("ada-lovelace.yaml", "ada-lovelace.northwind.yaml", "tomas-rivera.yaml", "posting-northwind.json"))
@@ -137,8 +137,8 @@ def main():
         check("empty section is dropped, never rendered", "Projects" not in headings(out / "empty.profile.json"))
 
         print("keyword report")
-        code, log = run(MATCH, out / "tailored.pdf", "--target", POSTING)
-        check("runs and reports coverage", code == 0 and "covered" in log, log)
+        code, log = run(VERIFY, out / "tailored.pdf", "--profile", out / "tailored.profile.json", "--target", POSTING)
+        check("reports coverage", code == 0 and "keywords on the page" in log, log)
         check("shows the fit assessment", "Strong" in log)
 
     failed = [r for r in results if not r[1]]

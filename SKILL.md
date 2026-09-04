@@ -85,13 +85,13 @@ it is. Three true sections beat five where two are padding.
 
 ## Step 4: pick the kind and tailor to the position
 
-`kinds/job.json`, `kinds/hackathon.json`, `kinds/competition.json` each set
+`kinds.json` holds job, hackathon and competition. Each sets
 section order, priority shifts, caps, whether the summary renders, and the
 reasoning in a `notes` field. Read the notes before writing a single bullet: a
 hiring manager, a hackathon organiser and a selection committee read the same
 career from opposite ends.
 
-Then follow `references/tailoring.md`: weight the posting's requirements, score
+Then follow `TAILORING.md`: weight the posting's requirements, score
 every bullet as evidence against them, turn scores into priorities, apply the
 kind, and cut by hand anything the reader for this posting would not miss.
 
@@ -104,7 +104,7 @@ Write to the posting's vocabulary where the work is real and nowhere else.
   rejects pronouns and em dashes.
 - **Name what the reader will not recognise.** `Script S.A.` is a wasted line;
   `Script S.A. (BBVA, Volkswagen Financial Services)` is the fact that mattered.
-  `references/tailoring.md` section 5 has the rule and its source; it is the most
+  `TAILORING.md` section 5 has the rule and its source; it is the most
   common failure in cross-border applications and the cheapest to fix.
 - Summary last, only for `kind: job`, two or three lines: the role in the
   reader's words, then the one result that proves it.
@@ -133,8 +133,7 @@ failure is explained in the report.
 **Verify.** Non-zero exit means it does not ship.
 
 ```bash
-python3 scripts/verify_cv.py out/cv.pdf --profile out/cv.profile.json --master profile.yaml --max-pages 1
-python3 scripts/match_report.py out/cv.pdf --target target.json
+python3 scripts/verify_cv.py out/cv.pdf --profile out/cv.profile.json --master profile.yaml --target target.json
 ```
 
 `--master` is the guard that matters: it fails if tailoring moved a date, grew
@@ -177,9 +176,8 @@ rubric item that is not a 2 and why. If the fit is weak, say weak.
 
 ## Files
 
-- `references/harvard-format.md`: the format the template implements
-- `references/tailoring.md`: the scoring and shape procedure, with a worked example
-- `kinds/*.json`: order, priorities, caps and reasoning per kind
+- `TAILORING.md`: the scoring and shape procedure, with a worked example
+- `kinds.json`: order, priorities, caps and reasoning per kind
 - `examples/`: three fictional people. `ada-lovelace.yaml` is the commented
   master profile; `ada-lovelace.northwind.yaml` is her tailored to
   `posting-northwind.json`; `tomas-rivera.yaml` is a student with no roles
