@@ -51,16 +51,16 @@
 
   align(center)[
     #text(size: size + 7pt, weight: "bold", tracking: 1.1pt)[#upper(name)]
-    #v(3.5pt * rhythm)
+    #v(6pt * rhythm)
     #text(size: size - 1pt, fill: rgb(25, 25, 25))[#contact.join("   |   ")]
   ]
   if summary != "" {
-    v(7pt * rhythm)
+    v(11pt * rhythm)
     // No heading. A labelled "Summary" costs a line and tells the reader nothing
     // they cannot see. The paragraph sits where the eye already lands first.
     set par(justify: false, leading: 0.55em)
     block(above: 0pt, below: 0pt)[#text(size: size)[#summary]]
-    v(13pt * rhythm)
+    v(15pt * rhythm)
   } else {
     v(9pt * rhythm)
   }
