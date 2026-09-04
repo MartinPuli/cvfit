@@ -107,6 +107,14 @@ One JSON file per person. `schema/profile.schema.json` documents it; the shape i
 text layer, a missing name or section heading, first-person pronouns, or em dashes.
 Exit code is non-zero, so it works as a pre-send gate or a CI step.
 
+## Summary line
+
+`kind: job` renders two or three lines under the contact block, no heading. It is
+the most posting-sensitive text on a resume, so it gets rewritten per application
+rather than kept in the master. `hackathon` and `competition` switch it off:
+organisers and committees skim for evidence, and three lines of positioning are
+three lines a working link or a ranked result would use better.
+
 ## Keyword coverage
 
 ```bash

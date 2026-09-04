@@ -24,6 +24,7 @@
 #let cv(
   name: "",
   contact: (),
+  summary: "",
   sections: (),
   font: ("Georgia", "Palatino", "Times New Roman"),
   size: 10.5pt,
@@ -39,7 +40,16 @@
     #v(3.5pt)
     #text(size: size - 1pt, fill: rgb(25, 25, 25))[#contact.join("   |   ")]
   ]
-  v(9pt)
+  if summary != "" {
+    v(7pt)
+    // No heading. A labelled "Summary" costs a line and tells the reader nothing
+    // they cannot see. The paragraph sits where the eye already lands first.
+    set par(justify: false, leading: 0.55em)
+    text(size: size)[#summary]
+    v(3pt)
+  } else {
+    v(9pt)
+  }
 
   for (si, s) in sections.enumerate() {
     if si > 0 { v(13pt) }

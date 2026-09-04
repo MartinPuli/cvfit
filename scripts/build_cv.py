@@ -30,6 +30,10 @@ def apply_kind(p, kind):
         sys.exit("unknown kind: %s (have: %s)"
                  % (kind, ", ".join(sorted(x.stem for x in KINDS.glob("*.json")))))
     cfg = json.loads(f.read_text())
+    # A hiring manager reads a summary; a hackathon organiser skips it and looks
+    # for links. The kind decides, not the profile.
+    if not cfg.get("summary", False):
+        p["summary"] = ""
     order = [h.lower() for h in cfg.get("section_order", [])]
 
     def rank(sec):
@@ -90,7 +94,8 @@ def load(path):
 
 def view(p, dropped):
     """The profile as it will render, with dropped ids removed and orphans pruned."""
-    out = {"name": p["name"], "contact": p.get("contact", []), "sections": []}
+    out = {"name": p["name"], "contact": p.get("contact", []),
+           "summary": p.get("summary", ""), "sections": []}
     for s in p["sections"]:
         entries = []
         for e in s["entries"]:
@@ -123,8 +128,9 @@ def to_typst(v, font, size, margin):
         secs.append("(heading: [%s], entries: %s)" % (esc(s["heading"]), arr(entries)))
     contact = arr(["[" + esc(c) + "]" for c in v.get("contact", [])])
     return (TEMPLATE.read_text()
-            + '\n#cv(name: "%s", contact: %s, sections: %s, font: %s, size: %s, margin: %s)\n'
-            % (esc_str(v["name"]), contact, arr(secs), fonts, size, margin))
+            + '\n#cv(name: "%s", contact: %s, summary: [%s], sections: %s, font: %s, size: %s, margin: %s)\n'
+            % (esc_str(v["name"]), contact, esc(v.get("summary", "")),
+               arr(secs), fonts, size, margin))
 
 
 def compile_pdf(src, out):

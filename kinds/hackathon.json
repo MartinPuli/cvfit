@@ -21,5 +21,7 @@
     "GPA",
     "enterprise process detail"
   ],
-  "notes": "Organisers read an application in seconds and admit thousands. They are filtering for people who ship something in 36 hours and do not vanish on Sunday night. Ranked results with denominators, working links and evidence a past project outlived its event beat any job title. Include projects that are running now, not the most technically impressive dead one."
+  "notes": "Organisers read an application in seconds and admit thousands. They are filtering for people who ship something in 36 hours and do not vanish on Sunday night. Ranked results with denominators, working links and evidence a past project outlived its event beat any job title. Include projects that are running now, not the most technically impressive dead one.",
+  "summary": false,
+  "summary_note": "Off. Organisers and committees skim for evidence, not positioning, and a career summary costs three lines that a working link or a ranked result uses better."
 }

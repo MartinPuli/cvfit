@@ -38,7 +38,7 @@
           "priority": 92,
           "bullets": [
             {
-              "text": "Built Execution OS solo in 2 months: 30 mini apps, LLM pipelines, integrated accounting and an MCP server exposing the operation as agent-callable tools. Aiming to offload 80% of the manual work; in daily use and demoed to other executives.",
+              "text": "Built Execution OS solo in 2 months: 30 mini apps, LLM pipelines, integrated accounting and an MCP server exposing the operation as agent-callable tools, aiming to offload 80% of the manual work. In daily use and demoed to other executives.",
               "priority": 90
             }
           ]
@@ -64,7 +64,7 @@
           "priority": 95,
           "bullets": [
             {
-              "text": "Migrated legacy 4D systems to Java and Spring Boot for the second largest private bank in Argentina and an automotive lender, with an agentic testing pipeline in CI/CD that automated the conversion and cut manual effort roughly 40%.",
+              "text": "Migrated legacy 4D systems to Java and Spring Boot for the second largest private bank in Argentina and an automotive lender, with an agentic CI/CD pipeline that automated the conversion and cut manual effort roughly 40%.",
               "priority": 93
             }
           ]
@@ -109,7 +109,7 @@
           "priority": 82,
           "bullets": [
             {
-              "text": "Text-to-3D city reconstruction in Blender with a self-correcting render loop scored on held-out cameras. Seat-accurate stadiums from it are close to entering a first-division club's ticket flow.",
+              "text": "Text-to-3D city reconstruction in Blender, self-correcting render loop scored on held-out cameras. Stadiums built from it are close to entering a first-division club's ticket flow.",
               "priority": 80
             }
           ]
@@ -151,14 +151,11 @@
             {
               "text": "Community: founder of the Buenos Aires chapter of The AI Collective, Vice President of the UCEMA CS Club, 12 hackathons entered with 9 podiums and 3 wins.",
               "priority": 78
-            },
-            {
-              "text": "Languages: Spanish native, English C1.",
-              "priority": 62
             }
           ]
         }
       ]
     }
-  ]
+  ],
+  "summary": "Backend and AI engineer, three years shipping to production in banking, fintech and AI. Executive assistant to a unicorn co-founder, building his operating layer with agents. Won the Aleph hackathon against 151 projects with Warden, an on-device LLM gateway heading to launch."
 }

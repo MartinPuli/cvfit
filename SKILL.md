@@ -71,7 +71,13 @@ Copy the master profile, then for this specific posting:
 - **Reorder sections.** Harvard's default for students is Education, Experience, Leadership and Activities, Skills and Interests. For a specialised role, a dedicated section beats a generic one: a security posting reads *Security Projects* differently from *Projects*.
 - **Reorder and rewrite bullets** so the ones matching the posting's language come first. Use the posting's vocabulary only where the work genuinely matches it.
 - **Set priorities.** Every bullet and entry takes `priority` (higher survives). This is what the fitter uses when the content does not fit.
-- **Cut.** A tailored resume is shorter than the master, not longer.
+- **Write the summary, when the kind wants one.** Two or three lines under the
+  contact block, no heading. It is the most posting-sensitive text on the page:
+  name the role in the reader's own words, then the one result that proves it.
+  `kinds/*.json` decides whether it appears; a hackathon organiser skips it.
+- **Cut.** A tailored resume is shorter than the master, not longer. Watch for a
+  fact stated twice: `English C1` in an education bullet and again in a languages
+  line costs a whole line and adds nothing.
 - **Name what the reader will not recognise.** An employer, university or client
   that means nothing to the person reading is a wasted line. Say what it is:
   `Script S.A. (BBVA, Volkswagen Financial Services)` rather than `Script S.A.`

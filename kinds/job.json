@@ -22,5 +22,7 @@
     "GPA once there is real work history",
     "community event attendance"
   ],
-  "notes": "A hiring manager is asking one question: has this person done the job before, or the nearest thing to it. Tenure, domain and outcome beat volume of side projects. Name the industry and the stakes, because 'built a web app' and 'built payment paths for a bank' read as different jobs."
+  "notes": "A hiring manager is asking one question: has this person done the job before, or the nearest thing to it. Tenure, domain and outcome beat volume of side projects. Name the industry and the stakes, because 'built a web app' and 'built payment paths for a bank' read as different jobs.",
+  "summary": true,
+  "summary_note": "Two or three lines under the contact block, rewritten per posting. It is the highest-leverage sentence on the page and the most posting-sensitive: name the role being applied for in the reader's own words, then the single result that proves it."
 }
