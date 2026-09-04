@@ -49,7 +49,7 @@ sections:
         date: "2024"
         priority: 70
         bullets:
-          - Un REPL de Python de 600 líneas con autocompletado e historial, escrito para entender cómo funciona el real. 120 estrellas.
+          - REPL de Python de 600 líneas con autocompletado e historial, escrito para ver cómo funciona el real. 120 estrellas.
 
   - heading: Liderazgo y actividades
     entries:
