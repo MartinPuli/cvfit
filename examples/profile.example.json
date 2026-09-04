@@ -7,10 +7,14 @@
     "linkedin.com/in/example"
   ],
   "summary": "Backend engineer, four years shipping payment and ledger systems at two fintechs. Led the migration of a card-issuing platform off a monolith with no customer-facing downtime, and built the reconciliation service that closed a recurring six-figure gap.",
+  "style": {
+    "font": "Georgia, Palatino, Times New Roman",
+    "size": "10.5pt",
+    "margin": "0.55in"
+  },
   "sections": [
     {
       "heading": "Education",
-      "priority": 90,
       "entries": [
         {
           "title": "University of Example",
@@ -19,17 +23,13 @@
           "date": "2016 – 2020",
           "priority": 90,
           "bullets": [
-            {
-              "text": "Thesis on numerical methods for difference engines. Departmental prize for applied mathematics.",
-              "priority": 70
-            }
+            "Thesis on numerical methods for difference engines. Departmental prize for applied mathematics."
           ]
         }
       ]
     },
     {
       "heading": "Experience",
-      "priority": 100,
       "entries": [
         {
           "title": "Analytical Engine Ltd (card issuing for challenger banks)",
@@ -59,14 +59,8 @@
           "date": "2020 – 2023",
           "priority": 88,
           "bullets": [
-            {
-              "text": "Designed the double-entry ledger that replaced spreadsheet-based loan accounting, Postgres with event sourcing, auditable to the penny across 40k loans.",
-              "priority": 88
-            },
-            {
-              "text": "Wrote the underwriting rules engine in Python; reduced manual review of applications from 60% to 22% while holding default rates flat.",
-              "priority": 84
-            }
+            "Designed the double-entry ledger that replaced spreadsheet-based loan accounting, Postgres with event sourcing, auditable to the penny across 40k loans.",
+            "Wrote the underwriting rules engine in Python; reduced manual review of applications from 60% to 22% while holding default rates flat."
           ]
         },
         {
@@ -76,17 +70,13 @@
           "date": "2019",
           "priority": 60,
           "bullets": [
-            {
-              "text": "Built internal Python and SQL tooling for a data team; automated a weekly report that had taken a day.",
-              "priority": 55
-            }
+            "Built internal Python and SQL tooling for a data team; automated a weekly report that had taken a day."
           ]
         }
       ]
     },
     {
       "heading": "Projects",
-      "priority": 80,
       "entries": [
         {
           "title": "ledgerlint",
@@ -95,69 +85,51 @@
           "date": "2022 – Present",
           "priority": 80,
           "bullets": [
-            {
-              "text": "Static checker for double-entry ledger schemas; catches unbalanced postings and orphaned accounts at CI time. Used by three fintechs in production.",
-              "priority": 78
-            }
+            "Static checker for double-entry ledger schemas; catches unbalanced postings and orphaned accounts at CI time. Used by three fintechs in production."
           ]
         },
         {
           "title": "Bernoulli",
           "subtitle": "Personal project",
-          "meta": "",
           "date": "2021",
           "priority": 60,
           "bullets": [
-            {
-              "text": "Toy interpreter for a stack machine, written to understand how the first published algorithm would actually run.",
-              "priority": 58
-            }
+            "Toy interpreter for a stack machine, written to understand how the first published algorithm would actually run."
           ]
         }
       ]
     },
     {
       "heading": "Leadership and Activities",
-      "priority": 70,
       "entries": [
         {
           "title": "London Fintech Engineers meetup",
           "subtitle": "Co-organiser",
-          "meta": "",
           "date": "2022 – Present",
           "priority": 70,
           "bullets": [
-            {
-              "text": "Quarterly meetup of 150 to 200 engineers; recruited speakers from six companies and found a free venue.",
-              "priority": 68
-            }
+            "Quarterly meetup of 150 to 200 engineers; recruited speakers from six companies and found a free venue."
           ]
         }
       ]
     },
     {
       "heading": "Skills and Interests",
-      "priority": 85,
       "entries": [
         {
-          "title": "",
-          "subtitle": "",
-          "meta": "",
-          "date": "",
           "priority": 85,
-          "bullets": [],
           "items": [
             {
               "label": "Backend",
-              "text": "Go, Python, Ruby, PostgreSQL, Kafka, Redis, Docker, Kubernetes, AWS."
+              "text": "Go, Python, Ruby, PostgreSQL, Kafka, Redis, Docker, Kubernetes, AWS"
             },
             {
               "label": "Domain",
-              "text": "card issuing, ledgers, reconciliation, PCI DSS scope reduction."
+              "text": "card issuing, ledgers, reconciliation, PCI DSS scope reduction"
             },
             {
               "label": "Languages",
-              "text": "English native, French fluent."
+              "text": "English native, French fluent"
             }
           ]
         }
