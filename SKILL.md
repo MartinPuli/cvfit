@@ -97,6 +97,30 @@ kind, and cut by hand anything the reader for this posting would not miss.
 
 Write to the posting's vocabulary where the work is real and nowhere else.
 
+## Language
+
+The resume is written in whichever language the person asks for, and the same
+rules apply in all of them. What changes and what does not:
+
+- **Headings** go in the target language (`Experiencia`, `Formación`,
+  `Compétences`). The builder recognises them by alias for ordering, caps and
+  the Education-first rule, and renders exactly what was written. Unknown
+  headings are kept and simply not reordered.
+- **Dates**: the local convention, `2023 – Actualidad`, `2023 – Presente`,
+  `2023 – Aujourd'hui`. Never mix languages inside one document.
+- **Proper nouns and technology names stay as they are.** `Spring Boot` is not
+  translated; `Universidad Nacional de Córdoba` is not translated into English
+  either, but what it is gets explained when the reader will not know it.
+- **Pronouns**: fragments, no first person, in every language. Run
+  `verify_cv.py --lang es` (or `pt`, `fr`) so the check uses the right words.
+- **The recognition rule works in reverse too.** A Spanish resume for a Spanish
+  reader still has to say what an unknown foreign employer is.
+- Do not translate a finished English resume word for word. Write it in the
+  target language from the profile; the sentence rhythm is different and a
+  literal translation reads as one.
+
+`examples/tomas-rivera.es.yaml` is the Spanish version of the student example.
+
 ## Step 5: write
 
 - Bullets: past-tense verb, what was built, the domain and stakes, the outcome,
@@ -133,7 +157,7 @@ failure is explained in the report.
 **Verify.** Non-zero exit means it does not ship.
 
 ```bash
-python3 scripts/verify_cv.py out/cv.pdf --profile out/cv.profile.json --master profile.yaml --target target.json
+python3 scripts/verify_cv.py out/cv.pdf --profile out/cv.profile.json --master profile.yaml --target target.json --lang en
 ```
 
 `--master` is the guard that matters: it fails if tailoring moved a date, grew

@@ -1,0 +1,78 @@
+# El mismo Tomás, en castellano. Los encabezados van en el idioma del CV; el
+# builder los reconoce por alias (Educación, Experiencia, Proyectos...) para
+# ordenar y aplicar topes, y la página conserva la palabra que escribiste.
+# Verificar con: verify_cv.py --lang es
+
+name: Tomás Rivera
+contact:
+  - Córdoba, Argentina
+  - tomas@example.com
+  - github.com/example-tomas
+
+summary: >-
+  Estudiante de computación que entrega. Construyó un predictor de llegada de
+  colectivos que usan unas 400 personas por día en Córdoba, salió 2° entre 60 equipos
+  en un hackatón regional y da el laboratorio de introducción a la programación.
+
+sections:
+  - heading: Educación
+    entries:
+      - title: Universidad Nacional de Córdoba
+        subtitle: Licenciatura en Ciencias de la Computación, tercer año
+        meta: Córdoba, Argentina
+        date: 2023 – Actualidad
+        priority: 90
+        bullets:
+          - Promedio 8,9/10. Algoritmos, sistemas operativos, bases de datos y sistemas distribuidos.
+
+  - heading: Proyectos
+    entries:
+      - title: cuándo-llega
+        subtitle: Predictor de llegada para el transporte público de Córdoba
+        meta: github.com/example-tomas/cuando-llega
+        date: 2025 – Actualidad
+        priority: 95
+        bullets:
+          - text: Lee el GPS municipal cada 15 segundos y predice la llegada a cada parada con un modelo de gradient boosting; error mediano menor a 90 segundos contra 6 minutos de la app oficial.
+            priority: 95
+          - text: Unas 400 personas por día desde un solo post en Reddit, corriendo en una VM gratuita hace ocho meses.
+            priority: 90
+      - title: Hackatón regional, 2° de 60 equipos
+        subtitle: 48 horas, equipo de tres
+        date: "2025"
+        priority: 85
+        bullets:
+          - Backend de una herramienta que conecta excedentes de restaurantes con comedores; Postgres, FastAPI y un bot de Telegram para confirmar retiros.
+      - title: pyrepl-lite
+        subtitle: Código abierto
+        meta: github.com/example-tomas/pyrepl-lite
+        date: "2024"
+        priority: 70
+        bullets:
+          - Un REPL de Python de 600 líneas con autocompletado e historial, escrito para entender cómo funciona el real. 120 estrellas.
+
+  - heading: Liderazgo y actividades
+    entries:
+      - title: Laboratorio de Introducción a la Programación
+        subtitle: Ayudante
+        date: 2024 – Actualidad
+        priority: 75
+        bullets:
+          - Dicta el laboratorio semanal a 40 ingresantes; escribió el corrector automático que hoy usa la materia.
+      - title: Club de programación de la facultad
+        subtitle: Organizador
+        date: 2024 – Actualidad
+        priority: 60
+        bullets:
+          - Organiza una noche de construcción mensual; la asistencia creció de 8 a 35 personas.
+
+  - heading: Habilidades e intereses
+    entries:
+      - priority: 80
+        items:
+          - label: Lenguajes
+            text: Python, Go, SQL, algo de Rust
+          - label: Herramientas
+            text: PostgreSQL, FastAPI, Docker, Linux, git
+          - label: Idiomas
+            text: Español nativo, inglés B2

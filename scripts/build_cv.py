@@ -17,6 +17,29 @@ ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE = ROOT / "templates" / "harvard.typ"
 KINDS = ROOT / "kinds.json"
 
+# Section headings are whatever the profile says, in whatever language. Kinds
+# reason about canonical names, so headings are normalised for matching only;
+# the page keeps the user's wording. Add a language by adding its words here.
+ALIASES = {
+    "experience": ["experience", "experiencia", "expérience", "experiência", "work", "employment", "trabajo"],
+    "projects": ["projects", "proyectos", "projets", "projetos"],
+    "education": ["education", "educación", "educacion", "formación", "formacion", "études", "formação"],
+    "leadership": ["leadership", "liderazgo", "activities", "actividades", "activités", "atividades"],
+    "skills": ["skills", "habilidades", "competencias", "compétences", "competências", "tecnologías", "tools"],
+    "hackathons": ["hackathons", "hackatones", "hackathon", "hackatón"],
+    "awards": ["awards", "premios", "prix", "prêmios", "honors", "distinciones", "competitions", "competencias"],
+    "summary": ["summary", "resumen", "perfil", "résumé", "resumo"],
+}
+
+
+def canon(heading):
+    """'Experiencia Profesional' -> 'experience'. Unknown headings map to themselves."""
+    h = heading.lower()
+    for key, words in ALIASES.items():
+        if any(w in h for w in words):
+            return key
+    return h
+
 
 def apply_kind(p, kind):
     """Reorder sections and shift priorities for the kind of thing being applied to.
@@ -36,9 +59,9 @@ def apply_kind(p, kind):
     order = [h.lower() for h in cfg.get("section_order", [])]
 
     def rank(sec):
-        h = sec["heading"].lower()
+        h = canon(sec["heading"])
         for i, o in enumerate(order):
-            if o in h or h in o:
+            if canon(o) == h:
                 return i
         return len(order)
 
@@ -48,9 +71,9 @@ def apply_kind(p, kind):
     # Education first for them regardless of kind, and a hiring manager reads
     # "Projects" above "Education" on a student resume as someone hiding the
     # fact. So: no Experience section, Education leads.
-    heads = [x["heading"].lower() for x in p["sections"]]
-    if not any("experience" in h for h in heads):
-        edu = [x for x in p["sections"] if "education" in x["heading"].lower()]
+    heads = [canon(x["heading"]) for x in p["sections"]]
+    if "experience" not in heads:
+        edu = [x for x in p["sections"] if canon(x["heading"]) == "education"]
         if edu:
             p["sections"].remove(edu[0])
             p["sections"].insert(0, edu[0])
@@ -64,8 +87,7 @@ def apply_kind(p, kind):
     capped = []
     for sec in p["sections"]:
         for key, (max_e, max_b) in cfg.get("caps", {}).items():
-            hl, kl = sec["heading"].lower(), key.lower()
-            if not (kl in hl or hl in kl):
+            if canon(key) != canon(sec["heading"]):
                 continue
             ranked = sorted(sec["entries"], key=lambda e: -e["priority"])
             for e in ranked[max_e:]:
@@ -82,8 +104,7 @@ def apply_kind(p, kind):
     for sec in p["sections"]:
         delta = 0
         for key, val in cfg.get("boost", {}).items():
-            hl, kl = sec["heading"].lower(), key.lower()
-            if kl in hl or hl in kl:
+            if canon(key) == canon(sec["heading"]):
                 delta = val
                 break
         if delta:

@@ -136,6 +136,19 @@ def main():
         run(BUILD, out / "empty.json", "-o", out / "empty.pdf", "--kind", "job")
         check("empty section is dropped, never rendered", "Projects" not in headings(out / "empty.profile.json"))
 
+        print("language")
+        code, log = run(BUILD, EX / "tomas-rivera.es.yaml", "-o", out / "es.pdf", "--kind", "job")
+        check("spanish profile builds on one page", code == 0 and pages(out / "es.pdf") == 1, log)
+        check("spanish headings are recognised: Educación leads", headings(out / "es.profile.json")[0] == "Educación", str(headings(out / "es.profile.json")))
+        code, log = run(VERIFY, out / "es.pdf", "--profile", out / "es.profile.json", "--lang", "es")
+        check("spanish profile passes verify --lang es", code == 0, log)
+        es = load(EX / "tomas-rivera.es.yaml")
+        es["sections"][1]["entries"][0]["bullets"][0] = {"text": "Yo construí mi predictor para nuestra ciudad", "priority": 95}
+        (out / "es-bad.json").write_text(json.dumps(es))
+        run(BUILD, out / "es-bad.json", "-o", out / "es-bad.pdf")
+        code, log = run(VERIFY, out / "es-bad.pdf", "--lang", "es", "--min-fill", "0")
+        check("spanish pronouns are rejected with --lang es", code != 0 and "pronoun" in log, log)
+
         print("keyword report")
         code, log = run(VERIFY, out / "tailored.pdf", "--profile", out / "tailored.profile.json", "--target", POSTING)
         check("reports coverage", code == 0 and "keywords on the page" in log, log)

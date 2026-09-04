@@ -13,7 +13,14 @@ on any failure.
 import argparse, json, re, subprocess, sys
 from pathlib import Path
 
-PRONOUNS = r"\b(I|I'm|I've|I'd|my|My|we|We|our|Our)\b"
+# First-person pronouns per language. A resume speaks in fragments, not in the
+# first person, in every language this tool has been used in.
+PRONOUNS = {
+    "en": r"\b(I|I'm|I've|I'd|my|My|we|We|our|Our)\b",
+    "es": r"\b([Yy]o|[Mm]i|[Mm]is|[Mm]í|[Nn]osotros|[Nn]osotras|[Nn]uestr[oa]s?)\b",
+    "pt": r"\b([Ee]u|[Mm]eu|[Mm]inha|[Mm]eus|[Mm]inhas|[Nn]ós|[Nn]oss[oa]s?)\b",
+    "fr": r"\b([Jj]e|[Jj]'|[Mm]on|[Mm]a|[Mm]es|[Nn]ous|[Nn]otre|[Nn]os)\b",
+}
 
 
 def load_profile(path):
@@ -31,6 +38,7 @@ def main():
     ap.add_argument("--max-pages", type=int, default=1)
     ap.add_argument("--min-fill", type=float, default=0.75,
                     help="fail when the content uses less of the page than this")
+    ap.add_argument("--lang", default="en", choices=sorted(PRONOUNS), help="language of the resume, for the pronoun check")
     ap.add_argument("--target", help="posting json: also report which of its keywords reached the page")
     ap.add_argument("--master", help="the untailored profile. Fails if tailoring changed a date or title, or invented an entry.")
     a = ap.parse_args()
@@ -67,7 +75,7 @@ def main():
     if "—" in text:
         fails.append("em dash present; use commas, colons or semicolons")
 
-    hits = sorted(set(re.findall(PRONOUNS, text)))
+    hits = sorted(set(re.findall(PRONOUNS[a.lang], text)))
     if hits:
         fails.append("first-person pronouns in the text: %s" % ", ".join(hits))
 

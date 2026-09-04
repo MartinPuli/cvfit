@@ -55,6 +55,14 @@ past project outlived its weekend, a committee compares ranks. `kinds.json`
 holds each one's section order, priority shifts, caps and reasoning. With no
 Experience section, Education leads whatever the kind.
 
+## Language
+
+Write the profile in whatever language the resume should be in. Headings are
+recognised by alias (`Experiencia`, `Formación`, `Compétences`) so ordering and
+caps work the same, and the page keeps your wording. `verify_cv.py --lang es`
+switches the pronoun check. `examples/tomas-rivera.es.yaml` is the student
+example in Spanish.
+
 ## Format
 
 US Letter, 0.55in margins, Georgia 10.5pt with Palatino and Times New Roman as
