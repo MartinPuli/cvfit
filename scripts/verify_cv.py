@@ -72,7 +72,7 @@ def main():
     if len(text.strip()) < 200:
         fails.append("text layer looks empty, an ATS would read nothing")
 
-    if "," in text:
+    if "\u2014" in text:  # the em dash, escaped so a blanket text replacement can never turn this check into a comma check
         fails.append("em dash present; use commas, colons or semicolons")
 
     hits = sorted(set(re.findall(PRONOUNS[a.lang], text)))
