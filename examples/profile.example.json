@@ -77,7 +77,7 @@
           "priority": 60,
           "bullets": [
             {
-              "text": "Built internal tooling for a data team in Python and SQL; automated a weekly report that had taken a day by hand.",
+              "text": "Built internal Python and SQL tooling for a data team; automated a weekly report that had taken a day.",
               "priority": 55
             }
           ]
@@ -103,7 +103,7 @@
         },
         {
           "title": "Bernoulli",
-          "subtitle": "",
+          "subtitle": "Personal project",
           "meta": "",
           "date": "2021",
           "priority": 60,
@@ -128,7 +128,7 @@
           "priority": 70,
           "bullets": [
             {
-              "text": "Runs a quarterly meetup of 150 to 200 engineers; recruited speakers from six companies and moved it to a free venue.",
+              "text": "Quarterly meetup of 150 to 200 engineers; recruited speakers from six companies and found a free venue.",
               "priority": 68
             }
           ]
