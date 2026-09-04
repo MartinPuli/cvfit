@@ -122,7 +122,7 @@ looking. The skill makes looking a step, not an afterthought.
 make test        # or: python3 tests/run.py
 ```
 
-Twenty-five checks, each of which builds a real PDF and inspects it. They cover
+Thirty-six checks, each of which builds a real PDF and inspects it. They cover
 the one-page limit, page fill, the three kinds and their section orders, the
 summary switching by kind, and every guard that must fail: two pages, first-person
 pronouns, an inflated date, an inflated title, an invented employer, a page that
