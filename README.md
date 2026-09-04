@@ -35,7 +35,14 @@ brew install typst poppler && pip install pyyaml
 git clone https://github.com/MartinPuli/cvfit.git
 ```
 
-To use it as a skill, copy the repo into `~/.claude/skills/cvfit/`.
+As a Claude Code plugin, which is the easy way:
+
+```
+/plugin marketplace add MartinPuli/cvfit
+/plugin install cvfit@cvfit
+```
+
+Or copy the repo into `~/.claude/skills/cvfit/` and it loads as a plain skill.
 
 ## Two commands
 

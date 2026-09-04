@@ -172,6 +172,13 @@ def main():
         check("reports coverage", code == 0 and "keywords on the page" in log, log)
         check("shows the fit assessment", "Strong" in log)
 
+    print("plugin marketplace")
+    check("marketplace.json is valid and points at this repo",
+          json.loads((ROOT / ".claude-plugin" / "marketplace.json").read_text())["plugins"][0]["source"] == ".")
+    check("plugin skill is the same file as the root SKILL.md",
+          (ROOT / "skills" / "cvfit" / "SKILL.md").read_text() == (ROOT / "SKILL.md").read_text(),
+          "run: cp SKILL.md skills/cvfit/SKILL.md")
+
     failed = [r for r in results if not r[1]]
     print("\n%d checks, %d failed" % (len(results), len(failed)))
     return len(failed)

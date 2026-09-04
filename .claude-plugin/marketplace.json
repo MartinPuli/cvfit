@@ -1,0 +1,14 @@
+{
+  "name": "cvfit",
+  "owner": {
+    "name": "Martín Pulitano",
+    "url": "https://github.com/MartinPuli"
+  },
+  "plugins": [
+    {
+      "name": "cvfit",
+      "source": ".",
+      "description": "One-page Harvard-format resume aimed at a specific job, hackathon or fellowship posting, with a fitter that keeps it to a page and a guard that fails the build if tailoring inflates a date or a title."
+    }
+  ]
+}
