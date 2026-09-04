@@ -14,7 +14,7 @@
 //   bullets do, or the list stops reading as a list.
 //   Hierarchy, largest to smallest: 18pt between sections, 8pt after the
 //   summary (it belongs to the header block, not to a section), 11pt from a section rule to its content, 7pt between entries,
-//   3pt from a subtitle to its bullets, 2.5pt from a title to its subtitle. A
+//   5pt from a subtitle to its bullets, 4pt from a title to its subtitle. A
 //   heading has to sit closer to what follows it than to what precedes it, or
 //   it reads as belonging to the previous section, all scaled by `rhythm`. build_cv.py raises that multiplier
 //   after the content is settled, so a page that would end two inches short gets
@@ -60,7 +60,7 @@
     // they cannot see. The paragraph sits where the eye already lands first.
     set par(justify: false, leading: 0.55em)
     block(above: 0pt, below: 0pt)[#text(size: size)[#summary]]
-    v(8pt * rhythm)
+    v(13pt * rhythm)
   } else {
     v(9pt * rhythm)
   }
@@ -86,7 +86,7 @@
         // explicit, since the title block above has below: 0pt. Title and
         // subtitle are one unit, so this is the tightest gap on the page,
         // but 1pt let the italic ascenders touch the title baseline.
-        v(2.5pt * rhythm)
+        v(4pt * rhythm)
         grid(
           columns: (1fr, auto),
           align: (left, right),
@@ -103,7 +103,7 @@
         }
       }
       if e.bullets.len() > 0 {
-        if e.title != "" or e.subtitle != "" { v(3pt * rhythm) }
+        if e.title != "" or e.subtitle != "" { v(5pt * rhythm) }
         for (bi, b) in e.bullets.enumerate() {
           if bi > 0 { v(4pt * rhythm) }
           block(above: 0pt, below: 0pt)[#grid(
