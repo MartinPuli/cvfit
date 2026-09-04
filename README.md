@@ -1,4 +1,4 @@
-# cv-converter
+# cvfit
 
 Give it a job posting and whatever career material you already have. It writes
 a one-page resume aimed at that posting, in the Harvard format, and refuses to
@@ -25,10 +25,10 @@ Python 3.9+, [Typst](https://typst.app), poppler (`pdfinfo`, `pdftotext`), pyyam
 
 ```bash
 brew install typst poppler && pip install pyyaml      # macOS
-git clone https://github.com/MartinPuli/cv-converter.git
+git clone https://github.com/MartinPuli/cvfit.git
 ```
 
-As a skill, copy the repo into `~/.claude/skills/cv-converter/`.
+As a skill, copy the repo into `~/.claude/skills/cvfit/`.
 
 ## Use
 

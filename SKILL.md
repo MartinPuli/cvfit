@@ -1,9 +1,9 @@
 ---
-name: cv-converter
+name: cvfit
 description: "Use when someone points at a job, hackathon, fellowship or program application and wants a resume for it. Triggers: a posting URL, a screenshot of a posting, pasted posting text, a company plus role name, or phrasings like 'adapt my CV to this', 'tailor my resume for this role', 'Harvard format resume', 'make a CV for this application', 'one-page resume'. The skill reads the posting, assembles the person's material from whatever exists (the conversation, an Obsidian vault, markdown notes, an old resume, public repos), decides the right shape for that person and that posting, renders a one-page Harvard-format PDF, and evaluates it against a rubric until it passes or the gap is explained. Do not use for cover letters, LinkedIn profiles or portfolio sites."
 ---
 
-# cv-converter
+# cvfit
 
 One posting and one person in; one page out, aimed at that posting, honest, and
 checked.

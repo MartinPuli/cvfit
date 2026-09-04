@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Evals for cv-converter. No framework, no dependencies beyond the tool itself.
+"""Evals for cvfit. No framework, no dependencies beyond the tool itself.
 
     python3 tests/run.py
 
