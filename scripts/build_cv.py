@@ -191,14 +191,16 @@ def main():
         if not cands:
             print("fit: nothing left to drop, still %d pages" % pages, file=sys.stderr)
             break
-        _, _, cid, kind, label = cands[0]
+        prio, _, cid, kind, label = cands[0]
         dropped.add(cid)
-        log.append((cid, kind, label))
+        log.append((cid, kind, label, prio))
         src, pages = render()
 
     restored = []
     if log and not a.no_restore:
-        for cid, kind, label in sorted(log, key=lambda x: x[0], reverse=True):
+        # highest priority first: the restore pass exists to undo an over-cut, so it
+        # has to reconsider the most valuable casualty before the cheapest one
+        for cid, kind, label, prio in sorted(log, key=lambda x: -x[3]):
             dropped.discard(cid)
             src2, pages2 = render()
             if pages2 <= a.max_pages:
@@ -219,7 +221,7 @@ def main():
         print("  leads with: %s" % cfg["lead_with"])
     print("%s  %d page(s)" % (out, pages))
     print("effective profile: %s" % effp)
-    gone = [(k, l) for cid, k, l in log if cid in dropped]
+    gone = [(k, l) for cid, k, l, _ in log if cid in dropped]
     if gone:
         print("fit dropped %d item(s) to reach %d page(s):" % (len(gone), a.max_pages))
         for k, l in gone:

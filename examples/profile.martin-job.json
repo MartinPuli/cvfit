@@ -130,38 +130,6 @@
       ]
     },
     {
-      "heading": "Leadership and Activities",
-      "priority": 70,
-      "entries": [
-        {
-          "title": "The AI Collective, Buenos Aires chapter",
-          "subtitle": "Founder and Chapter Lead",
-          "meta": "",
-          "date": "2026 – Present",
-          "priority": 82,
-          "bullets": [
-            {
-              "text": "Founded the chapter from nothing; first event drew 300 signups for a 30-seat room and ran with 100 in person and 100+ on stream.",
-              "priority": 80
-            }
-          ]
-        },
-        {
-          "title": "UCEMA Computer Science Club",
-          "subtitle": "Vice President",
-          "meta": "",
-          "date": "2026 – Present",
-          "priority": 82,
-          "bullets": [
-            {
-              "text": "Organizing the largest hackathon in the university's history. 12 hackathons entered, 9 podiums, 3 wins, judge at one.",
-              "priority": 80
-            }
-          ]
-        }
-      ]
-    },
-    {
       "heading": "Skills and Interests",
       "priority": 86,
       "entries": [
@@ -179,6 +147,10 @@
             {
               "text": "AI: LLM agents, MCP servers, local inference, multi-model routing, LangChain, OCR pipelines, ML.",
               "priority": 85
+            },
+            {
+              "text": "Community: founder of the Buenos Aires chapter of The AI Collective, Vice President of the UCEMA CS Club, 12 hackathons entered with 9 podiums and 3 wins.",
+              "priority": 78
             },
             {
               "text": "Languages: Spanish native, English C1.",
