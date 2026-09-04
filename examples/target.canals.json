@@ -1,0 +1,41 @@
+{
+  "source": "https://jobs.ashbyhq.com/canals/3ca42c7a-f778-45f4-a5cf-22a9a7be5bc8",
+  "captured_via": "browser (Ashby renders client-side, plain fetch returns only the title)",
+  "company": "Canals",
+  "what_they_build": "Software for wholesale distributors: order processing, purchasing, accounts payable, workflow automation with AI",
+  "role": "Security Engineer",
+  "seniority": "Senior",
+  "location": "Remote. Buenos Aires listed among LatAm hubs",
+  "employment": "Full time",
+  "must_have": [
+    "Hands-on experience securing production systems",
+    "Drive remediation across teams with clear priorities and follow-up",
+    "Ownership of deliverables end to end",
+    "Strong communication, remote, fast-moving product environment",
+    "Integrating security into CI/CD and infrastructure-as-code"
+  ],
+  "responsibilities": [
+    "Identify highest-impact security risks and lead remediation end-to-end",
+    "Own application security tooling for code, dependencies and secrets",
+    "Lead threat modeling, risk assessments and architecture reviews",
+    "Validate and triage bug bounty and pentest findings",
+    "Lead security monitoring and incident response"
+  ],
+  "nice_to_have": [
+    "High-growth startups or small teams"
+  ],
+  "keywords": [
+    "application security",
+    "secrets",
+    "dependencies",
+    "threat modeling",
+    "risk assessment",
+    "architecture review",
+    "incident response",
+    "CI/CD",
+    "infrastructure-as-code",
+    "remediation",
+    "production systems"
+  ],
+  "honest_fit_assessment": "Partial. Candidate is a backend and AI engineer with production experience in banking and fintech who built and shipped a security product (Warden), not a career security engineer. The posting asks for a senior security background. Emphasise the security product, the regulated-industry production work and the CI/CD automation; do not claim threat modeling, pentest triage or incident response experience that does not exist."
+}

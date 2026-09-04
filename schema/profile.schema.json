@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "cv-converter profile",
+  "description": "Canonical CV data. One file per person. The model tailors a copy of this per application; the builder renders it.",
+  "type": "object",
+  "required": ["name", "contact", "sections"],
+  "properties": {
+    "name": { "type": "string" },
+    "contact": {
+      "type": "array",
+      "description": "Rendered centred under the name, joined by pipes. Plain text, no protocol prefixes.",
+      "items": { "type": "string" }
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["heading", "entries"],
+        "properties": {
+          "heading": { "type": "string", "description": "Rendered upper-case. Harvard order: Education, Experience, Leadership & Activities, Skills & Interests." },
+          "priority": { "type": "integer", "default": 50, "description": "Higher survives auto-fit. Sections are never dropped, only their entries." },
+          "entries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["title"],
+              "properties": {
+                "title":    { "type": "string" },
+                "subtitle": { "type": "string", "default": "" },
+                "meta":     { "type": "string", "default": "", "description": "Right side of the second line, usually location." },
+                "date":     { "type": "string", "default": "" },
+                "text":     { "type": "string", "default": "", "description": "Prose alternative to bullets." },
+                "priority": { "type": "integer", "default": 50 },
+                "bullets": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      { "type": "string" },
+                      {
+                        "type": "object",
+                        "required": ["text"],
+                        "properties": {
+                          "text":     { "type": "string" },
+                          "priority": { "type": "integer", "default": 50 }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

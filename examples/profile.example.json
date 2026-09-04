@@ -1,0 +1,76 @@
+{
+  "name": "Ada Lovelace",
+  "contact": [
+    "London, United Kingdom",
+    "ada@example.com",
+    "github.com/example",
+    "linkedin.com/in/example"
+  ],
+  "sections": [
+    {
+      "heading": "Education",
+      "priority": 90,
+      "entries": [
+        {
+          "title": "University of Example",
+          "subtitle": "B.Sc. Mathematics",
+          "meta": "London, UK",
+          "date": "2020 - 2024",
+          "priority": 90,
+          "bullets": [
+            {
+              "text": "First class honours. Thesis on numerical methods for difference engines.",
+              "priority": 70
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Experience",
+      "priority": 100,
+      "entries": [
+        {
+          "title": "Analytical Engine Project",
+          "subtitle": "Lead Analyst",
+          "meta": "London",
+          "date": "2024 - Present",
+          "priority": 95,
+          "bullets": [
+            {
+              "text": "Wrote the first published algorithm intended for a general-purpose machine, including a method for computing Bernoulli numbers.",
+              "priority": 95
+            },
+            {
+              "text": "Documented the engine's operation for an audience outside mathematics, which became the reference text for the project.",
+              "priority": 70
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Skills and Interests",
+      "priority": 80,
+      "entries": [
+        {
+          "title": "",
+          "subtitle": "",
+          "meta": "",
+          "date": "",
+          "priority": 80,
+          "bullets": [
+            {
+              "text": "Technical: algorithm design, numerical methods, symbolic notation.",
+              "priority": 80
+            },
+            {
+              "text": "Languages: English native, French fluent.",
+              "priority": 60
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
