@@ -23,6 +23,14 @@
 
 #let date-grey = rgb("#5a5a5a")
 
+// Every block element here is wrapped in block(above: 0pt, below: 0pt) and the
+// gaps are explicit v() calls. Measured reason: with Typst's implicit block
+// spacing left on, an entry with no title row (a skills list) sat 12pt lower
+// under its rule than every titled entry, and neither a negative v() nor an
+// empty grid could pull it back. Zeroing the implicit spacing and owning it
+// with one constant brings all sections within 0.5pt of each other.
+#let SECTION_GAP = 16pt
+
 #let cv(
   name: "",
   contact: (),
@@ -58,18 +66,18 @@
     if si > 0 { v(13pt * rhythm) }
     text(size: size + 0.5pt, weight: "bold", tracking: 1pt)[#upper(s.heading)]
     v(2pt * rhythm)
-    line(length: 100%, stroke: 0.7pt + black)
-    v(5pt * rhythm)
+    block(above: 0pt, below: 0pt)[#line(length: 100%, stroke: 0.7pt + black)]
+    v(SECTION_GAP * rhythm)
 
     for (i, e) in s.entries.enumerate() {
       if i > 0 { v(7pt * rhythm) }
       if e.title != "" or e.date != "" {
-        grid(
+        block(above: 0pt, below: 0pt)[#grid(
           columns: (1fr, auto),
           align: (left, right),
           text(weight: "bold")[#e.title],
           text(style: "italic", size: size - 0.5pt, fill: date-grey)[#e.date],
-        )
+        )]
       }
       if e.subtitle != "" or e.meta != "" {
         v(0.5pt)
@@ -80,16 +88,23 @@
           text(style: "italic", size: size - 0.5pt, fill: date-grey)[#e.meta],
         )
       }
+      // Labelled lines: "Backend: Go, Python, ..." with the label bold. A person
+      // scans a skills block by label; an ATS reads it as plain lines.
+      if e.items.len() > 0 {
+        for (ii, it) in e.items.enumerate() {
+          if ii > 0 { v(2.5pt * rhythm) }
+          block(above: 0pt, below: 0pt)[#grid(columns: (1fr,), [#strong(it.label): #it.text])]
+        }
+      }
       if e.bullets.len() > 0 {
         if e.title != "" or e.subtitle != "" { v(3pt * rhythm) }
         for (bi, b) in e.bullets.enumerate() {
-          block(above: if bi == 0 { 0pt } else { 4pt * rhythm }, below: 0pt)[
-            #grid(
-              columns: (11pt, 1fr),
-              align: (left, left),
-              text[#sym.bullet], [#b],
-            )
-          ]
+          if bi > 0 { v(4pt * rhythm) }
+          block(above: 0pt, below: 0pt)[#grid(
+            columns: (11pt, 1fr),
+            align: (left, left),
+            text[#sym.bullet], [#b],
+          )]
         }
       }
       if e.text != "" { v(3pt * rhythm); e.text }

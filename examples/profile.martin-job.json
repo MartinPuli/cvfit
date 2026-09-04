@@ -139,18 +139,19 @@
           "meta": "",
           "date": "",
           "priority": 86,
-          "bullets": [
+          "bullets": [],
+          "items": [
             {
-              "text": "Backend: Java, Spring Boot, Python, TypeScript, React, SQL, PostgreSQL, Sybase, Docker, AWS, COBOL (CICS, JCL).",
-              "priority": 86
+              "label": "Backend",
+              "text": "Java, Spring Boot, Python, TypeScript, React, SQL, PostgreSQL, Sybase, Docker, AWS, COBOL (CICS, JCL)."
             },
             {
-              "text": "AI: LLM agents, MCP servers, local inference, multi-model routing, LangChain, OCR pipelines, ML.",
-              "priority": 85
+              "label": "AI",
+              "text": "LLM agents, MCP servers, local inference, multi-model routing, LangChain, OCR pipelines, ML."
             },
             {
-              "text": "Community: founder of the Buenos Aires chapter of The AI Collective, Vice President of the UCEMA CS Club, 12 hackathons entered with 9 podiums and 3 wins.",
-              "priority": 78
+              "label": "Community",
+              "text": "founder of the Buenos Aires chapter of The AI Collective, Vice President of the UCEMA CS Club, 12 hackathons entered with 9 podiums and 3 wins."
             }
           ]
         }

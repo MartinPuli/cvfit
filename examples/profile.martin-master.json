@@ -231,18 +231,19 @@
           "meta": "",
           "date": "",
           "priority": 86,
-          "bullets": [
+          "bullets": [],
+          "items": [
             {
-              "text": "Backend: Java, Spring Boot, Python, TypeScript, React, SQL, PostgreSQL, Sybase, Docker, AWS, COBOL (CICS, JCL).",
-              "priority": 86
+              "label": "Backend",
+              "text": "Java, Spring Boot, Python, TypeScript, React, SQL, PostgreSQL, Sybase, Docker, AWS, COBOL (CICS, JCL)."
             },
             {
-              "text": "AI: LLM agents, MCP servers, local inference, multi-model routing, LangChain, OCR pipelines, ML.",
-              "priority": 85
+              "label": "AI",
+              "text": "LLM agents, MCP servers, local inference, multi-model routing, LangChain, OCR pipelines, ML."
             },
             {
-              "text": "Languages: Spanish native, English C1.",
-              "priority": 62
+              "label": "Languages",
+              "text": "Spanish native, English C1."
             }
           ]
         }

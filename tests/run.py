@@ -130,6 +130,33 @@ def main():
         check("master profile fits by dropping, and says what", code == 0 and "dropped" in log, log[-300:])
         check("master profile lands on one page", pages(out / "master.pdf") == 1)
 
+        print("incomplete profiles")
+        base = json.loads((EX / "profile.example.json").read_text())
+        cases = {
+            "student, no experience": [x for x in base["sections"] if x["heading"] in ("Education", "Projects", "Skills and Interests")],
+            "only experience and skills": [x for x in base["sections"] if x["heading"] in ("Experience", "Skills and Interests")],
+            "empty projects list": [dict(x, entries=[]) if x["heading"] == "Projects" else x for x in base["sections"]],
+            "no skills at all": [x for x in base["sections"] if x["heading"] != "Skills and Interests"],
+        }
+        for n, (label, secs) in enumerate(cases.items()):
+            prof = dict(base, sections=secs)
+            f = out / ("inc-%d.json" % n)
+            f.write_text(json.dumps(prof))
+            code, log = run(BUILD, f, "-o", f.with_suffix(".pdf"), "--kind", "job")
+            ok = code == 0 and pages(f.with_suffix(".pdf")) == 1
+            code2, log2 = run(VERIFY, f.with_suffix(".pdf"), "--profile", f.with_suffix(".profile.json"), "--min-fill", "0")
+            check("builds and verifies: " + label, ok and code2 == 0, (log + log2)[-300:])
+        eff = json.loads((out / "inc-2.profile.json").read_text())
+        check("empty section is dropped, not rendered", all(x["entries"] for x in eff["sections"]))
+
+        print("yaml")
+        code, log = run(BUILD, EX / "profile.example.yaml", "-o", out / "y.pdf", "--kind", "job")
+        check("yaml profile builds", code == 0, log[-200:])
+        code, log = run(VERIFY, out / "y.pdf", "--profile", out / "y.profile.json")
+        check("yaml profile passes verify", code == 0, log[-300:])
+        check("yaml and json examples render the same text",
+              text(out / "y.pdf").split() == text(out / "ex.pdf").split())
+
         print("keyword report")
         code, log = run(MATCH, out / "k-job.pdf", "--target", EX / "target.canals.json")
         check("match report runs", code == 0 and "covered" in log, log[-200:])

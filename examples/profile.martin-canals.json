@@ -144,22 +144,23 @@
           "meta": "",
           "date": "",
           "priority": 85,
-          "bullets": [
+          "bullets": [],
+          "items": [
             {
-              "text": "Security: policy enforcement, secret masking, audit logging, on-device inference, code signing, scoped tool permissions, CI-integrated automated testing.",
-              "priority": 85
+              "label": "Security",
+              "text": "policy enforcement, secret masking, audit logging, on-device inference, code signing, scoped tool permissions, CI-integrated automated testing."
             },
             {
-              "text": "Backend: Java, Spring Boot, Python, TypeScript, SQL, PostgreSQL, Sybase, Docker, AWS, COBOL (CICS, JCL).",
-              "priority": 84
+              "label": "Backend",
+              "text": "Java, Spring Boot, Python, TypeScript, SQL, PostgreSQL, Sybase, Docker, AWS, COBOL (CICS, JCL)."
             },
             {
-              "text": "AI: LLM agents, MCP servers, local inference, multi-model routing, OCR pipelines.",
-              "priority": 83
+              "label": "AI",
+              "text": "LLM agents, MCP servers, local inference, multi-model routing, OCR pipelines."
             },
             {
-              "text": "Languages: Spanish native, English C1.",
-              "priority": 60
+              "label": "Languages",
+              "text": "Spanish native, English C1."
             }
           ]
         }

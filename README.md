@@ -81,7 +81,11 @@ survived onto the page), and optionally the generated `.typ` with `--keep-typ`.
 
 ## The data model
 
-One JSON file per person. `schema/profile.schema.json` documents it; the shape is:
+One file per person, YAML or JSON. `examples/profile.example.yaml` is the one to
+copy: every field has a comment beside it. Leave out any section you do not have;
+the builder drops empty sections and never invents one. Skills use `items`, a bold
+label and plain text, which a person scans by label and an ATS reads as lines.
+`schema/profile.schema.json` documents everything; the JSON shape is:
 
 ```json
 {

@@ -74,14 +74,25 @@ def esc_str(s):
 
 
 def load(path):
-    p = json.loads(Path(path).read_text())
+    """JSON or YAML. YAML is the editable one: comments, no quoting, no commas."""
+    raw = Path(path).read_text()
+    if str(path).lower().endswith((".yaml", ".yml")):
+        try:
+            import yaml
+        except ImportError:
+            sys.exit("YAML profile needs pyyaml: pip install pyyaml")
+        p = yaml.safe_load(raw)
+    else:
+        p = json.loads(raw)
     for si, s in enumerate(p["sections"]):
         s.setdefault("priority", 50)
         for ei, e in enumerate(s["entries"]):
-            for k in ("subtitle", "meta", "date", "text"):
+            for k in ("title", "subtitle", "meta", "date", "text"):
                 e.setdefault(k, "")
             e.setdefault("priority", 50)
             e["id"] = "e%d.%d" % (si, ei)
+            e["items"] = [{"label": str(it.get("label", "")), "text": str(it.get("text", ""))}
+                          for it in (e.get("items") or [])]
             bl = []
             for bi, b in enumerate(e.get("bullets", [])):
                 if isinstance(b, str):
@@ -102,7 +113,7 @@ def view(p, dropped):
             if e["id"] in dropped:
                 continue
             bl = [b for b in e["bullets"] if b["id"] not in dropped]
-            if e["bullets"] and not bl and not e["text"]:
+            if e["bullets"] and not bl and not e["text"] and not e.get("items"):
                 continue  # entry lost every bullet, a bare title helps nobody
             entries.append({**e, "bullets": bl})
         if entries:
@@ -121,10 +132,12 @@ def to_typst(v, font, size, margin, rhythm=1.0):
         entries = []
         for e in s["entries"]:
             bl = arr(["[" + esc(b["text"]) + "]" for b in e["bullets"]]) if e["bullets"] else "()"
+            its = arr(["(label: [%s], text: [%s])" % (esc(i["label"]), esc(i["text"]))
+                       for i in e.get("items", [])]) if e.get("items") else "()"
             entries.append(
-                "(title: [%s], subtitle: [%s], meta: [%s], date: [%s], text: [%s], bullets: %s)"
+                "(title: [%s], subtitle: [%s], meta: [%s], date: [%s], text: [%s], bullets: %s, items: %s)"
                 % (esc(e["title"]), esc(e["subtitle"]), esc(e["meta"]),
-                   esc(e["date"]), esc(e["text"]), bl))
+                   esc(e["date"]), esc(e["text"]), bl, its))
         secs.append("(heading: [%s], entries: %s)" % (esc(s["heading"]), arr(entries)))
     contact = arr(["[" + esc(c) + "]" for c in v.get("contact", [])])
     return (TEMPLATE.read_text()
@@ -216,6 +229,14 @@ def main():
             sys.exit("missing dependency: " + tool)
 
     p = load(a.profile)
+    # a `style` block in the profile sets the defaults; flags still win
+    st = p.get("style") or {}
+    if a.font == ap.get_default("font") and st.get("font"):
+        a.font = st["font"]
+    if a.size == ap.get_default("size") and st.get("size"):
+        a.size = str(st["size"])
+    if a.margin == ap.get_default("margin") and st.get("margin"):
+        a.margin = str(st["margin"])
     cfg = apply_kind(p, a.kind) if a.kind else None
     out = Path(a.out)
     dropped, log = set(), []

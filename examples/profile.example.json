@@ -145,18 +145,19 @@
           "meta": "",
           "date": "",
           "priority": 85,
-          "bullets": [
+          "bullets": [],
+          "items": [
             {
-              "text": "Backend: Go, Python, Ruby, PostgreSQL, Kafka, Redis, Docker, Kubernetes, AWS.",
-              "priority": 85
+              "label": "Backend",
+              "text": "Go, Python, Ruby, PostgreSQL, Kafka, Redis, Docker, Kubernetes, AWS."
             },
             {
-              "text": "Domain: card issuing, ledgers, reconciliation, PCI DSS scope reduction.",
-              "priority": 84
+              "label": "Domain",
+              "text": "card issuing, ledgers, reconciliation, PCI DSS scope reduction."
             },
             {
-              "text": "Languages: English native, French fluent.",
-              "priority": 60
+              "label": "Languages",
+              "text": "English native, French fluent."
             }
           ]
         }

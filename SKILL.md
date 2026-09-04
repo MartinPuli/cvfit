@@ -41,7 +41,18 @@ Pull from whatever exists, in this order of trust:
 3. An Obsidian vault or markdown notes: project notes, company notes, decision records
 4. Public repos and sites they name
 
-Every number, title and date has to trace back to one of those. When something is uncertain, ask or leave it out; never round a figure up to make a bullet land.
+Every number, title and date has to trace back to one of those. When something is
+uncertain, ask or leave it out; never round a figure up to make a bullet land.
+
+Write the profile as YAML (`examples/profile.example.yaml` is commented field by
+field). JSON works too. Skills go in `items`, label plus text, not bullets.
+
+**Missing sections are normal and the tool expects them.** A student has no
+Experience; a career changer has no Projects; plenty of people have no Leadership.
+Leave the section out. The builder drops empty sections at render time and every
+kind's section order simply skips what is absent, so a `job` build with no
+Experience leads with Projects. What it will never do is invent one: a resume with
+three sections that are all true beats one with five where two are padding.
 
 ## Step 3: pick the kind
 
