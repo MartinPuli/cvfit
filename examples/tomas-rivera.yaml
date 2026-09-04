@@ -1,0 +1,76 @@
+# A student with no work history. Education leads, projects carry the page,
+# and nothing is padded to look like a job. See the shape table in SKILL.md.
+
+name: Tomás Rivera
+contact:
+  - Córdoba, Argentina
+  - tomas@example.com
+  - github.com/example-tomas
+
+summary: >-
+  Computer science student who ships. Built a bus-arrival predictor used daily by
+  around 400 people in Córdoba, placed 2nd of 60 teams at a regional hackathon,
+  and teaches the intro programming lab.
+
+sections:
+  - heading: Education
+    entries:
+      - title: Universidad Nacional de Córdoba (largest public university in central Argentina)
+        subtitle: Licenciatura en Ciencias de la Computación, third year
+        meta: Córdoba, Argentina
+        date: 2023 – Present
+        priority: 90
+        bullets:
+          - GPA 8.9/10. Coursework in algorithms, operating systems, databases and distributed systems.
+
+  - heading: Projects
+    entries:
+      - title: cuándo-llega
+        subtitle: Bus arrival predictor for Córdoba's public transit
+        meta: github.com/example-tomas/cuando-llega
+        date: 2025 – Present
+        priority: 95
+        bullets:
+          - text: Scrapes the city's GPS feed every 15 seconds and predicts arrival at each stop with a gradient-boosted model; median error under 90 seconds against 6 minutes for the official app.
+            priority: 95
+          - text: Around 400 daily users from a single Reddit post, running on one free-tier VM for eight months.
+            priority: 90
+      - title: Regional hackathon, 2nd of 60 teams
+        subtitle: 48-hour build, team of three
+        date: "2025"
+        priority: 85
+        bullets:
+          - Built the backend for a tool that matched surplus food from restaurants to shelters; Postgres, FastAPI, a Telegram bot for pickup confirmation.
+      - title: pyrepl-lite
+        subtitle: Open source
+        meta: github.com/example-tomas/pyrepl-lite
+        date: "2024"
+        priority: 70
+        bullets:
+          - A 600-line Python REPL with tab completion and history, written to understand how the real one works. 120 stars.
+
+  - heading: Leadership and Activities
+    entries:
+      - title: Intro to Programming lab
+        subtitle: Teaching assistant
+        date: 2024 – Present
+        priority: 75
+        bullets:
+          - Runs the weekly lab for 40 first-year students; wrote the autograder the course now uses.
+      - title: University programming club
+        subtitle: Organiser
+        date: 2024 – Present
+        priority: 60
+        bullets:
+          - Organises a monthly build night; attendance grew from 8 to 35.
+
+  - heading: Skills and Interests
+    entries:
+      - priority: 80
+        items:
+          - label: Languages
+            text: Python, Go, SQL, some Rust
+          - label: Tools
+            text: PostgreSQL, FastAPI, Docker, Linux, git
+          - label: Spoken
+            text: Spanish native, English B2

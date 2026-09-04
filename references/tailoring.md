@@ -42,7 +42,23 @@ read the effective profile the builder writes and ask of every remaining line:
 would the hiring manager for this posting miss it? If not, cut it by hand rather
 than leaving it to the fitter.
 
-## 5. Write to the posting's vocabulary, honestly
+## 5. Name what the reader will not recognise
+
+Silver.dev, which places Argentine and Uruguayan engineers into US startups,
+puts it bluntly: LatAm resumes rarely carry company names a US reader knows, so
+pedigree is worth nothing and impact, tenure and clarity have to carry the page.
+The rule generalises to any application that crosses a border, an industry or a
+size of company.
+
+For every organisation on the page, ask whether the reader will recognise the
+name. When not, say what it is, in the title or the first bullet: the client or
+parent (`Script S.A. (BBVA, Volkswagen Financial Services)`), the rank (`the
+second largest private bank in Argentina`), or the category and scale (`a
+wholesale distributor moving 40,000 SKUs`). Never in a separate glossary.
+
+Source: [The No-BS Guide to Hiring LatAm Engineers](https://blog.silver.dev/2025/02/07/the-no-bs-guide-to-hiring-latam-engineers/), Silver.dev, 2025.
+
+## 6. Write to the posting's vocabulary, honestly
 
 Where the work is real, use the posting's words for it. "Integrated an agentic
 testing pipeline into CI/CD" for a posting that says CI/CD, not "automated
@@ -51,7 +67,7 @@ testing in the build". Where the work is not real, the word does not go in.
 one is a question, "is there real work behind this", and the default answer is
 no.
 
-## 6. Rewrite the summary last
+## 7. Rewrite the summary last
 
 It is the most posting-sensitive text on the page and it should be written after
 the selection is settled, not before. Name the role in the reader's own words,
@@ -59,11 +75,10 @@ then the one result that proves it. Two or three lines. Only for `kind: job`.
 
 ## Worked example
 
-`examples/target.canals.json` and `examples/profile.martin-canals.json` are a
-real posting and a real tailoring. The posting asked for a senior security
-engineer; the candidate is a backend engineer who built one security product.
-The tailoring created a *Security Projects* section and led with it, reframed
-banking work as production systems handling money, used the posting's words
-"CI/CD" and "production systems" where the work backed them, and left "threat
-modeling" and "incident response" off the page because nothing backed them. The
-fit assessment says partial. That is the whole method.
+`examples/posting-northwind.json` is a posting; `examples/ada-lovelace.yaml` is
+the master profile and `examples/ada-lovelace.northwind.yaml` is the same person
+tailored to it. Diff the two: the summary is rewritten in the posting's words
+(monolith, on-call, latency), the on-call bullet and the ledger role move up in
+priority, and nothing else changes. Dates and titles are identical, which is
+what `verify_cv.py --master` checks. `examples/tomas-rivera.yaml` is the other
+shape: a student with no roles, where Education leads and projects carry it.

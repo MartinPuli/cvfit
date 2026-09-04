@@ -45,6 +45,19 @@ def apply_kind(p, kind):
 
     p["sections"].sort(key=rank)
 
+    # No work history means a student or a career changer. Harvard puts
+    # Education first for them regardless of kind, and a hiring manager reads
+    # "Projects" above "Education" on a student resume as someone hiding the
+    # fact. So: no Experience section, Education leads.
+    heads = [x["heading"].lower() for x in p["sections"]]
+    if not any("experience" in h for h in heads):
+        edu = [x for x in p["sections"] if "education" in x["heading"].lower()]
+        if edu:
+            p["sections"].remove(edu[0])
+            p["sections"].insert(0, edu[0])
+        # and projects carry the page, so they get the room a role would have had
+        cfg.setdefault("caps", {})["Projects"] = [4, 2]
+
     # Caps: someone with a lot to tell still gets one page. Keep the top N
     # entries per section and top M bullets per entry, by priority, and say
     # what was left out. This runs before the fitter so the fitter starts from

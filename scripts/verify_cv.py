@@ -13,6 +13,14 @@ from pathlib import Path
 PRONOUNS = r"\b(I|I'm|I've|I'd|my|My|we|We|our|Our)\b"
 
 
+def load_profile(path):
+    raw = Path(path).read_text()
+    if str(path).lower().endswith((".yaml", ".yml")):
+        import yaml
+        return yaml.safe_load(raw)
+    return json.loads(raw)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("pdf")
@@ -60,7 +68,7 @@ def main():
         fails.append("first-person pronouns in the text: %s" % ", ".join(hits))
 
     if a.profile:
-        p = json.loads(Path(a.profile).read_text())
+        p = load_profile(a.profile)
         flat = re.sub(r"\s+", " ", text)
         for part in p["name"].split():
             if part.lower() not in flat.lower():
@@ -73,8 +81,8 @@ def main():
             warns.append("profile has no bullets at all")
 
     if a.master and a.profile:
-        m = json.loads(Path(a.master).read_text())
-        t = json.loads(Path(a.profile).read_text())
+        m = load_profile(a.master)
+        t = load_profile(a.profile)
         ref = {}
         for s_ in m["sections"]:
             for e in s_["entries"]:

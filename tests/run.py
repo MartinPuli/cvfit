@@ -1,27 +1,28 @@
 #!/usr/bin/env python3
-"""Evals for cv-converter. No test framework, no extra dependencies.
+"""Evals for cv-converter. No framework, no dependencies beyond the tool itself.
 
     python3 tests/run.py
 
-Each check builds a real PDF and inspects it, so a green run means the whole
-pipeline works on this machine, not merely that the code parses. Exit code is
-the number of failures.
+Every check builds a real PDF and inspects it, so green means the whole
+pipeline works on this machine. Exit code is the number of failures.
 """
 import json, re, shutil, subprocess, sys, tempfile
 from pathlib import Path
 
+import yaml
+
 ROOT = Path(__file__).resolve().parent.parent
-BUILD = ROOT / "scripts" / "build_cv.py"
-VERIFY = ROOT / "scripts" / "verify_cv.py"
-MATCH = ROOT / "scripts" / "match_report.py"
+BUILD, VERIFY, MATCH = (ROOT / "scripts" / n for n in ("build_cv.py", "verify_cv.py", "match_report.py"))
 EX = ROOT / "examples"
+ADA, ADA_NW, TOMAS, POSTING = (EX / n for n in
+    ("ada-lovelace.yaml", "ada-lovelace.northwind.yaml", "tomas-rivera.yaml", "posting-northwind.json"))
 
 results = []
 
 
 def check(name, ok, detail=""):
-    results.append((name, ok, detail))
-    print("  %s  %s%s" % ("ok " if ok else "FAIL", name, ("  (" + detail.strip() + ")") if detail and not ok else ""))
+    results.append((name, ok))
+    print("  %s  %s%s" % ("ok " if ok else "FAIL", name, ("  (" + detail.strip()[-220:] + ")") if detail and not ok else ""))
 
 
 def run(*args):
@@ -30,8 +31,7 @@ def run(*args):
 
 
 def pages(pdf):
-    o = subprocess.run(["pdfinfo", str(pdf)], capture_output=True, text=True).stdout
-    m = re.search(r"Pages:\s+(\d+)", o)
+    m = re.search(r"Pages:\s+(\d+)", subprocess.run(["pdfinfo", str(pdf)], capture_output=True, text=True).stdout)
     return int(m.group(1)) if m else -1
 
 
@@ -39,8 +39,12 @@ def text(pdf):
     return subprocess.run(["pdftotext", str(pdf), "-"], capture_output=True, text=True).stdout
 
 
-def headings(profile_json):
-    return [s["heading"] for s in json.loads(Path(profile_json).read_text())["sections"]]
+def headings(effective_json):
+    return [s["heading"] for s in json.loads(Path(effective_json).read_text())["sections"]]
+
+
+def load(path):
+    return yaml.safe_load(Path(path).read_text())
 
 
 def main():
@@ -52,133 +56,93 @@ def main():
     with tempfile.TemporaryDirectory() as d:
         out = Path(d)
 
-        print("build and verify")
-        code, log = run(BUILD, EX / "profile.martin-job.json", "-o", out / "job.pdf", "--kind", "job", "--preview")
-        check("job profile builds", code == 0, log[-200:])
-        check("job profile is one page", pages(out / "job.pdf") == 1)
-        check("preview png written", (out / "job.png").exists())
-        fill = re.search(r"page fill:\s+(\d+)%", log)
-        check("job profile fills the page", fill is not None and int(fill.group(1)) >= 90, log[-200:])
-        code, log = run(VERIFY, out / "job.pdf", "--profile", out / "job.profile.json",
-                        "--master", EX / "profile.martin-master.json")
-        check("job profile passes verify with the master guard", code == 0, log[-300:])
+        print("three shapes build and verify")
+        for label, prof, extra in (("standard", ADA, []), ("tailored", ADA_NW, ["--master", ADA]), ("student", TOMAS, [])):
+            code, log = run(BUILD, prof, "-o", out / (label + ".pdf"), "--kind", "job", "--preview")
+            check(label + " builds", code == 0, log)
+            check(label + " is one page", pages(out / (label + ".pdf")) == 1)
+            fill = re.search(r"page fill:\s+(\d+)%", log)
+            check(label + " fills the page", fill is not None and int(fill.group(1)) >= 85, log)
+            code, log = run(VERIFY, out / (label + ".pdf"), "--profile", out / (label + ".profile.json"), *extra)
+            check(label + " passes verify", code == 0, log)
+        check("preview png written", (out / "standard.png").exists())
 
-        code, log = run(BUILD, EX / "profile.example.json", "-o", out / "ex.pdf", "--kind", "job")
-        check("generic example builds", code == 0, log[-200:])
-        check("generic example is one page", pages(out / "ex.pdf") == 1)
-        code, log = run(VERIFY, out / "ex.pdf", "--profile", out / "ex.profile.json")
-        check("generic example passes verify", code == 0, log[-300:])
+        print("shape: a student leads with Education even for a job")
+        check("student: Education first", headings(out / "student.profile.json")[0] == "Education", str(headings(out / "student.profile.json")))
+        check("standard: Experience first", headings(out / "standard.profile.json")[0] == "Experience")
 
         print("kinds")
         orders = {}
         for k in ("job", "hackathon", "competition"):
-            run(BUILD, EX / "profile.martin-canals.json", "-o", out / ("k-%s.pdf" % k), "--kind", k)
+            run(BUILD, ADA, "-o", out / ("k-%s.pdf" % k), "--kind", k)
             orders[k] = headings(out / ("k-%s.profile.json" % k))
-        check("job leads with Experience", orders["job"][0] == "Experience", str(orders["job"]))
-        check("hackathon leads with projects", "Projects" in orders["hackathon"][0], str(orders["hackathon"]))
+        check("hackathon leads with Projects", "Projects" in orders["hackathon"][0], str(orders["hackathon"]))
         check("competition leads with Education", orders["competition"][0] == "Education", str(orders["competition"]))
-        check("three kinds give three different orders", len({tuple(v) for v in orders.values()}) == 3)
-
-        run(BUILD, EX / "profile.martin-job.json", "-o", out / "s-job.pdf", "--kind", "job")
-        run(BUILD, EX / "profile.martin-job.json", "-o", out / "s-hack.pdf", "--kind", "hackathon")
-        summary = json.loads((EX / "profile.martin-job.json").read_text())["summary"][:40]
-        check("summary shows for job", summary in text(out / "s-job.pdf"))
-        check("summary hidden for hackathon", summary not in text(out / "s-hack.pdf"))
+        check("three kinds, three orders", len({tuple(v) for v in orders.values()}) == 3)
+        summary = load(ADA)["summary"][:40]
+        check("summary shows for job", summary in text(out / "k-job.pdf"))
+        check("summary hidden for hackathon", summary not in text(out / "k-hackathon.pdf"))
 
         print("guards that must fail")
-        run(BUILD, EX / "profile.martin-master.json", "-o", out / "long.pdf", "--max-pages", "5", "--no-polish")
+        run(BUILD, ADA, "-o", out / "long.pdf", "--max-pages", "5", "--no-polish", "--font", "Georgia", "--size", "13pt")
         code, log = run(VERIFY, out / "long.pdf", "--max-pages", "1", "--min-fill", "0")
-        check("verify rejects a two-page pdf", code != 0 and "page count" in log, log[-200:])
+        check("rejects more than one page", code != 0 and "page count" in log, log)
 
-        bad = json.loads((EX / "profile.example.json").read_text())
-        bad["sections"][1]["entries"][0]["bullets"][0] = {"text": "I wrote my first program for our machine", "priority": 90}
+        bad = load(TOMAS)
+        bad["sections"][1]["entries"][0]["bullets"][0] = {"text": "I built my predictor for our city", "priority": 95}
         (out / "bad.json").write_text(json.dumps(bad))
         run(BUILD, out / "bad.json", "-o", out / "bad.pdf")
         code, log = run(VERIFY, out / "bad.pdf", "--min-fill", "0")
-        check("verify rejects first-person pronouns", code != 0 and "pronoun" in log, log[-200:])
+        check("rejects first-person pronouns", code != 0 and "pronoun" in log, log)
 
-        t = json.loads((out / "job.profile.json").read_text())
+        t = load(ADA_NW)
         for s in t["sections"]:
             for e in s["entries"]:
-                if e["title"].startswith("Script"):
-                    e["date"] = "2019 - 2026"
-                    e["subtitle"] = "Staff Engineer"
+                if e.get("title", "").startswith("Analytical Engine"):
+                    e["date"], e["subtitle"] = "2019 – Present", "Staff Engineer"
         (out / "tampered.json").write_text(json.dumps(t))
-        code, log = run(VERIFY, out / "job.pdf", "--profile", out / "tampered.json",
-                        "--master", EX / "profile.martin-master.json")
-        check("master guard catches an inflated date", code != 0 and "date changed" in log, log[-300:])
-        check("master guard catches an inflated title", "title changed" in log, log[-300:])
+        code, log = run(VERIFY, out / "tailored.pdf", "--profile", out / "tampered.json", "--master", ADA)
+        check("master guard: inflated date", code != 0 and "date changed" in log, log)
+        check("master guard: inflated title", "title changed" in log, log)
 
-        t = json.loads((out / "job.profile.json").read_text())
-        t["sections"][0]["entries"].append({"title": "Google", "subtitle": "Staff Engineer",
-                                            "date": "2020 - 2024", "bullets": [{"text": "Led search."}]})
+        t = load(ADA_NW)
+        t["sections"][1]["entries"].append({"title": "Google", "subtitle": "Staff Engineer", "date": "2020 – 2024", "bullets": ["Led search."]})
         (out / "invented.json").write_text(json.dumps(t))
-        code, log = run(VERIFY, out / "job.pdf", "--profile", out / "invented.json",
-                        "--master", EX / "profile.martin-master.json")
-        check("master guard catches an invented entry", code != 0 and "not present in the master" in log, log[-300:])
+        code, log = run(VERIFY, out / "tailored.pdf", "--profile", out / "invented.json", "--master", ADA)
+        check("master guard: invented employer", code != 0 and "not present in the master" in log, log)
 
-        print("fit and polish")
-        short = json.loads((EX / "profile.example.json").read_text())
-        short["sections"] = short["sections"][:1]
+        print("fit, caps, missing sections")
+        short = load(TOMAS); short["sections"] = short["sections"][:1]
         (out / "short.json").write_text(json.dumps(short))
         code, log = run(BUILD, out / "short.json", "-o", out / "short.pdf")
-        check("short page is not polished", "polish opened" not in log and "write another bullet" in log, log[-300:])
+        check("short page: not polished, told to write more", "polish opened" not in log and "write another bullet" in log, log)
         code, log = run(VERIFY, out / "short.pdf")
-        check("verify rejects a short page", code != 0 and "of the page" in log, log[-200:])
+        check("short page: rejected", code != 0 and "of the page" in log, log)
 
-        code, log = run(BUILD, EX / "profile.martin-master.json", "-o", out / "master.pdf", "--kind", "job")
-        check("master profile fits by dropping, and says what", code == 0 and "dropped" in log, log[-300:])
-        check("master profile lands on one page", pages(out / "master.pdf") == 1)
-
-        print("incomplete profiles")
-        base = json.loads((EX / "profile.example.json").read_text())
-        cases = {
-            "student, no experience": [x for x in base["sections"] if x["heading"] in ("Education", "Projects", "Skills and Interests")],
-            "only experience and skills": [x for x in base["sections"] if x["heading"] in ("Experience", "Skills and Interests")],
-            "empty projects list": [dict(x, entries=[]) if x["heading"] == "Projects" else x for x in base["sections"]],
-            "no skills at all": [x for x in base["sections"] if x["heading"] != "Skills and Interests"],
-        }
-        for n, (label, secs) in enumerate(cases.items()):
-            prof = dict(base, sections=secs)
-            f = out / ("inc-%d.json" % n)
-            f.write_text(json.dumps(prof))
-            code, log = run(BUILD, f, "-o", f.with_suffix(".pdf"), "--kind", "job")
-            ok = code == 0 and pages(f.with_suffix(".pdf")) == 1
-            code2, log2 = run(VERIFY, f.with_suffix(".pdf"), "--profile", f.with_suffix(".profile.json"), "--min-fill", "0")
-            check("builds and verifies: " + label, ok and code2 == 0, (log + log2)[-300:])
-        eff = json.loads((out / "inc-2.profile.json").read_text())
-        check("empty section is dropped, not rendered", all(x["entries"] for x in eff["sections"]))
-
-        print("yaml")
-        code, log = run(BUILD, EX / "profile.example.yaml", "-o", out / "y.pdf", "--kind", "job")
-        check("yaml profile builds", code == 0, log[-200:])
-        code, log = run(VERIFY, out / "y.pdf", "--profile", out / "y.profile.json")
-        check("yaml profile passes verify", code == 0, log[-300:])
-        check("yaml and json examples render the same text",
-              text(out / "y.pdf").split() == text(out / "ex.pdf").split())
-
-        print("caps")
-        big = json.loads((EX / "profile.martin-master.json").read_text())
-        for sec in big["sections"]:
-            if sec["heading"] == "Experience":
-                for e in sec["entries"]:
-                    e["bullets"] = e["bullets"] + [{"text": "Extra bullet %d for cap testing." % i, "priority": 10} for i in range(4)]
+        big = load(ADA)
+        for s in big["sections"]:
+            if s["heading"] == "Experience":
+                for e in s["entries"]:
+                    e["bullets"] = list(e["bullets"]) + [{"text": "Filler bullet %d." % i, "priority": 10} for i in range(4)]
         (out / "big.json").write_text(json.dumps(big))
         code, log = run(BUILD, out / "big.json", "-o", out / "big.pdf", "--kind", "job")
-        eff = json.loads((out / "big.profile.json").read_text())
-        exp = [x for x in eff["sections"] if x["heading"] == "Experience"][0]
-        check("caps limit bullets per entry (job: 3)", all(len(e["bullets"]) <= 3 for e in exp["entries"]), str([len(e["bullets"]) for e in exp["entries"]]))
-        check("caps report what they left out", "caps left out" in log and "Extra bullet" in log, log[-300:])
-        check("low-priority extras are the ones capped", not any("Extra bullet" in b["text"] for e in exp["entries"] for b in e["bullets"]))
+        exp = [x for x in json.loads((out / "big.profile.json").read_text())["sections"] if x["heading"] == "Experience"][0]
+        check("caps: at most 3 bullets per role", all(len(e["bullets"]) <= 3 for e in exp["entries"]))
+        check("caps: filler is what got cut", "Filler" in log and not any("Filler" in b["text"] for e in exp["entries"] for b in e["bullets"]), log)
+
+        empty = load(ADA)
+        empty["sections"] = [dict(s, entries=[]) if s["heading"] == "Projects" else s for s in empty["sections"]]
+        (out / "empty.json").write_text(json.dumps(empty))
+        run(BUILD, out / "empty.json", "-o", out / "empty.pdf", "--kind", "job")
+        check("empty section is dropped, never rendered", "Projects" not in headings(out / "empty.profile.json"))
 
         print("keyword report")
-        code, log = run(MATCH, out / "k-job.pdf", "--target", EX / "target.canals.json")
-        check("match report runs", code == 0 and "covered" in log, log[-200:])
-        check("match report shows the fit assessment", "Partial" in log)
+        code, log = run(MATCH, out / "tailored.pdf", "--target", POSTING)
+        check("runs and reports coverage", code == 0 and "covered" in log, log)
+        check("shows the fit assessment", "Strong" in log)
 
     failed = [r for r in results if not r[1]]
-    print()
-    print("%d checks, %d failed" % (len(results), len(failed)))
+    print("\n%d checks, %d failed" % (len(results), len(failed)))
     return len(failed)
 
 

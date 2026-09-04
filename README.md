@@ -72,7 +72,7 @@ As a Claude Code skill, copy `SKILL.md`, `references/`, `schema/`, `scripts/` an
 ## Use
 
 ```bash
-python3 scripts/build_cv.py examples/profile.example.json -o out/cv.pdf --max-pages 1
+python3 scripts/build_cv.py examples/ada-lovelace.yaml -o out/cv.pdf --kind job --max-pages 1
 python3 scripts/verify_cv.py out/cv.pdf --profile out/cv.profile.json --max-pages 1
 ```
 
@@ -81,11 +81,11 @@ survived onto the page), and optionally the generated `.typ` with `--keep-typ`.
 
 ## The data model
 
-One file per person, YAML or JSON. `examples/profile.example.yaml` is the one to
+One file per person, YAML or JSON. `examples/ada-lovelace.yaml` is the one to
 copy: every field has a comment beside it. Leave out any section you do not have;
 the builder drops empty sections and never invents one. Skills use `items`, a bold
 label and plain text, which a person scans by label and an ATS reads as lines.
-`schema/profile.schema.json` documents everything; the JSON shape is:
+The JSON shape, if you prefer JSON:
 
 ```json
 {
@@ -122,7 +122,7 @@ looking. The skill makes looking a step, not an afterthought.
 make test        # or: python3 tests/run.py
 ```
 
-Thirty-six checks, each of which builds a real PDF and inspects it. They cover
+The checks, each of which builds a real PDF and inspects it. They cover
 the one-page limit, page fill, the three kinds and their section orders, the
 summary switching by kind, and every guard that must fail: two pages, first-person
 pronouns, an inflated date, an inflated title, an invented employer, a page that
@@ -178,9 +178,9 @@ the master. Tailoring may choose and reorder; it may not promote anyone. Asking 
 model in prose to stay honest is not enforcement, so this one is a test.
 
 The skill also writes an `honest_fit_assessment` into the target file and the model
-is told to report gaps out loud. `examples/target.canals.json` is a real posting where
-the candidate is a partial fit, and the assessment says so instead of dressing a
-backend engineer up as a career security engineer. A resume that oversells gets
+is told to report gaps out loud. `examples/posting-northwind.json` is a posting and
+`examples/ada-lovelace.northwind.yaml` is a person tailored to it: dates and titles
+identical to her master profile, which the guard checks. A resume that oversells gets
 found out in the first ten minutes of an interview, and the candidate is the one
 sitting in that chair.
 

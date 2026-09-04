@@ -57,7 +57,7 @@ applying anyway is the person's call.
 ## Step 2: read the person
 
 Build or update the master profile: everything, untailored, YAML
-(`examples/profile.example.yaml` is commented field by field). Skills go in
+(`examples/ada-lovelace.yaml` is commented field by field). Skills go in
 `items`. `priority` fields can stay at default here; they are set per posting in
 step 4.
 
@@ -104,8 +104,8 @@ Write to the posting's vocabulary where the work is real and nowhere else.
   rejects pronouns and em dashes.
 - **Name what the reader will not recognise.** `Script S.A.` is a wasted line;
   `Script S.A. (BBVA, Volkswagen Financial Services)` is the fact that mattered.
-  `references/recognition.md` has the rule and its source; it is the most common
-  failure in cross-border applications and the cheapest to fix.
+  `references/tailoring.md` section 5 has the rule and its source; it is the most
+  common failure in cross-border applications and the cheapest to fix.
 - Summary last, only for `kind: job`, two or three lines: the role in the
   reader's words, then the one result that proves it.
 
@@ -179,9 +179,8 @@ rubric item that is not a 2 and why. If the fit is weak, say weak.
 
 - `references/harvard-format.md`: the format the template implements
 - `references/tailoring.md`: the scoring and shape procedure, with a worked example
-- `references/recognition.md`: writing for a reader who has never heard of the employer
-- `schema/profile.schema.json`: every field
 - `kinds/*.json`: order, priorities, caps and reasoning per kind
-- `examples/`: a commented YAML profile, a real posting, and the tailoring that
-  answered it, where the fit was partial and the assessment says so
+- `examples/`: three fictional people. `ada-lovelace.yaml` is the commented
+  master profile; `ada-lovelace.northwind.yaml` is her tailored to
+  `posting-northwind.json`; `tomas-rivera.yaml` is a student with no roles
 - `tests/run.py`: the evals; green means the pipeline works on this machine

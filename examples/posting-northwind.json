@@ -1,0 +1,22 @@
+{
+  "source": "fictional posting, written for the example",
+  "company": "Northwind Logistics",
+  "what_they_build": "Freight booking and tracking for mid-size shippers in the Americas",
+  "role": "Backend Engineer",
+  "seniority": "Mid to senior",
+  "location": "Remote, Americas time zones",
+  "must_have": [
+    "3+ years building backend services in Go",
+    "Production experience with PostgreSQL and event streaming (Kafka or similar)",
+    "Has owned a service end to end: design, on-call, incident follow-up",
+    "Clear written communication in a remote team"
+  ],
+  "responsibilities": [
+    "Own the booking and pricing services",
+    "Design the migration off the remaining Rails monolith",
+    "Improve reliability: latency, on-call load, incident review"
+  ],
+  "nice_to_have": ["Payments or ledger experience", "Kubernetes"],
+  "keywords": ["Go", "PostgreSQL", "Kafka", "on-call", "monolith", "migration", "latency", "incident", "Kubernetes", "ledger"],
+  "honest_fit_assessment": "Strong. Four years of Go and Postgres in fintech, led a monolith migration, owned on-call for payments, ledger experience is a direct match for the nice-to-have. The gap is domain: freight, not payments. Lead with the migration and the on-call ownership; do not oversell logistics knowledge that does not exist."
+}
