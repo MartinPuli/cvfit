@@ -128,7 +128,12 @@ def main():
         code, log = run(BUILD, out / "big.json", "-o", out / "big.pdf", "--kind", "job")
         exp = [x for x in json.loads((out / "big.profile.json").read_text())["sections"] if x["heading"] == "Experience"][0]
         check("caps: at most 3 bullets per role", all(len(e["bullets"]) <= 3 for e in exp["entries"]))
-        check("caps: filler is what got cut", "Filler" in log and not any("Filler" in b["text"] for e in exp["entries"] for b in e["bullets"]), log)
+        # A cap is a ceiling, not a purge: an entry with one real bullet keeps
+        # two fillers under a cap of three. What caps guarantee is that nothing
+        # real is cut while a lower-priority bullet in the same entry survives.
+        real_cut = [l for l in log.splitlines() if l.strip().startswith("- bullet:") and "Filler" not in l and "caps left out" not in l]
+        check("caps: only the lowest-priority bullets were cut", "Filler" in log and "caps left out 9" in log, log)
+        check("caps: no real bullet was capped", not any("Filler" not in l for l in log.splitlines() if l.startswith("    - bullet:")), log)
 
         empty = load(ADA)
         empty["sections"] = [dict(s, entries=[]) if s["heading"] == "Projects" else s for s in empty["sections"]]

@@ -12,9 +12,9 @@ contact:
 # Rewritten for the Northwind posting: their words (monolith, on-call, latency)
 # where the work is real. Dates and titles are untouched; verify --master checks.
 summary: >-
-  Backend engineer, four years in Go and PostgreSQL on payment systems. Led a
-  nine-month migration off a Rails monolith with no customer-facing downtime, owned
-  on-call for the payments path and took p99 latency from 410ms to 140ms.
+  Backend engineer, four years in Go and PostgreSQL on payment systems. Led a nine-month
+  migration off a Rails monolith with no downtime, owned on-call for payments and took
+  p99 latency from 410ms to 140ms.
 
 # Optional. Flags on the command line still win over these.
 style:

@@ -16,9 +16,9 @@ contact:
 
 # Two or three lines. Only rendered for --kind job; the skill rewrites it per posting.
 summary: >-
-  Backend engineer, four years shipping payment and ledger systems at two fintechs.
-  Led the migration of a card-issuing platform off a monolith with no customer-facing
-  downtime, and built the reconciliation service that closed a recurring six-figure gap.
+  Backend engineer, four years on payment and ledger systems at two fintechs. Led a
+  card-issuing platform off its monolith with no downtime and built the reconciliation
+  service that closed a recurring six-figure gap.
 
 # Optional. Flags on the command line still win over these.
 style:
