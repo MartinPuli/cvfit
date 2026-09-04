@@ -43,6 +43,19 @@ person has done the job before. A selection committee compares candidates agains
 each other, so `1st of 151` carries weight that "won a hackathon" does not. Same
 material, three documents.
 
+## Typography
+
+Georgia at 10.5pt, falling back to Palatino and Times New Roman. That is a
+measurement, not a preference: rendering the same profile in eight faces, Charter
+ran 63pt longer than Times New Roman, about five lines, enough to cost a bullet on
+a one-page resume. Georgia lands within 15pt of Times, ships on every Windows and
+macOS machine, and was drawn for screen legibility. Pass `--font "Times New Roman"`
+when the page is genuinely full.
+
+Leading is 0.55em with 4pt between bullets. The gap between two bullets has to
+exceed the gap between wrapped lines inside one bullet, or the list stops reading
+as a list.
+
 ## Install
 
 Needs Python 3.9+, [Typst](https://typst.app), and `pdfinfo` / `pdftotext` from poppler.

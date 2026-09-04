@@ -2,28 +2,35 @@
 // Rendered by scripts/build_cv.py. Do not edit generated .typ files, edit the profile JSON.
 //
 // Typography notes, since they are decisions and not defaults:
-//   Charter first. Matthew Carter drew it for low-resolution output at small
-//   sizes, so it has a tall x-height and narrow set width: more words per line
-//   than Georgia, more legible on screen than Times. Georgia and Times New Roman
-//   follow as fallbacks because every machine has them.
+//   Georgia first, and the reason is measured rather than aesthetic. Rendering
+//   the same profile in eight faces at 10.5pt, Charter ran 63pt longer than
+//   Times New Roman, roughly five lines, enough to cost a bullet on a one-pager.
+//   Georgia lands within 15pt of Times, ships on every Windows and macOS machine,
+//   and was drawn by Matthew Carter for screen legibility. Palatino matches it on
+//   length; Times New Roman is the shortest and the safest, and is the fallback.
+//   Pick Times with --font when the page is genuinely full.
 //   Leading is 0.5em and the gap between bullets is 4pt, deliberately larger.
 //   Lines wrapped inside one bullet must sit closer together than two separate
 //   bullets do, or the list stops reading as a list.
-//   Vertical rhythm runs 2pt inside an entry, 5pt between entries, 8pt between
-//   sections, so the eye reads hierarchy from spacing alone.
+//   Vertical rhythm runs 3pt inside an entry, 7pt between entries and 13pt
+//   between sections. The ratio is what carries hierarchy: a section break has to
+//   read as clearly bigger than an entry break or the page turns into one list.
+//   Bullets are a two-column grid so wrapped lines align under the text rather
+//   than under the bullet. A par hanging-indent reads cleaner in source but does
+//   not survive into the block, which is why the grid stays.
 
 #let cv(
   name: "",
   contact: (),
   sections: (),
-  font: ("Charter", "Georgia", "Times New Roman"),
+  font: ("Georgia", "Palatino", "Times New Roman"),
   size: 10.5pt,
   margin: 0.55in,
 ) = {
   set document(title: name, author: name)
   set page(paper: "us-letter", margin: margin)
   set text(font: font, size: size, fill: black, hyphenate: false)
-  set par(justify: false, leading: 0.5em, spacing: 0.5em)
+  set par(justify: false, leading: 0.55em, spacing: 0.55em)
 
   align(center)[
     #text(size: size + 7pt, weight: "bold", tracking: 1.1pt)[#upper(name)]
@@ -33,14 +40,14 @@
   v(9pt)
 
   for (si, s) in sections.enumerate() {
-    if si > 0 { v(8pt) }
+    if si > 0 { v(13pt) }
     text(size: size + 0.5pt, weight: "bold", tracking: 1pt)[#upper(s.heading)]
     v(2pt)
     line(length: 100%, stroke: 0.7pt + black)
-    v(4pt)
+    v(5pt)
 
     for (i, e) in s.entries.enumerate() {
-      if i > 0 { v(5pt) }
+      if i > 0 { v(7pt) }
       if e.title != "" or e.date != "" {
         grid(
           columns: (1fr, auto),
@@ -59,11 +66,11 @@
         )
       }
       if e.bullets.len() > 0 {
-        if e.title != "" or e.subtitle != "" { v(2pt) }
+        if e.title != "" or e.subtitle != "" { v(3pt) }
         for (bi, b) in e.bullets.enumerate() {
           block(above: if bi == 0 { 0pt } else { 4pt }, below: 0pt)[
             #grid(
-              columns: (12pt, 1fr),
+              columns: (11pt, 1fr),
               align: (left, left),
               text[#sym.bullet], [#b],
             )

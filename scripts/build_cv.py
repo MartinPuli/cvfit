@@ -162,7 +162,7 @@ def main():
     ap.add_argument("profile")
     ap.add_argument("-o", "--out", default="out/cv.pdf")
     ap.add_argument("--max-pages", type=int, default=1)
-    ap.add_argument("--font", default="Charter,Georgia,Times New Roman",
+    ap.add_argument("--font", default="Georgia,Palatino,Times New Roman",
                     help="comma-separated fallback chain")
     ap.add_argument("--size", default="10.5pt")
     ap.add_argument("--margin", default="0.55in")
