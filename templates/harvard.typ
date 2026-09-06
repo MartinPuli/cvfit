@@ -52,7 +52,7 @@
   align(center)[
     #text(size: size + 7pt, weight: "bold", tracking: 1.1pt)[#upper(name)]
     #v(6pt * rhythm)
-    #text(size: size - 1pt, fill: rgb(25, 25, 25))[#contact.join("   |   ")]
+    #text(size: size - 1pt, fill: rgb(25, 25, 25))[#contact.map(c => box(c)).join("  |  ")]
   ]
   if summary != "" {
     v(11pt * rhythm)
