@@ -136,8 +136,12 @@ rules apply in all of them. What changes and what doesn't:
 ## Step 6: build
 
 ```bash
+pip install typst pyyaml pypdf          # once, and only if the machine lacks them
 python3 scripts/build_cv.py profile.yaml -o out/cv.pdf --kind job --max-pages 1 --preview
 ```
+
+Those three cover the whole toolchain with no system packages. When the machine
+already has the `typst` binary or poppler, cvfit uses those instead.
 
 The builder applies the kind, applies caps, fits to the page limit by dropping
 the lowest-priority items and then restoring what fits back in highest-priority

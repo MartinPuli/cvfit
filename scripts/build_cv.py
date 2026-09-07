@@ -13,6 +13,9 @@ passes unnoticed.
 import argparse, json, re, shutil, subprocess, sys, tempfile
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import toolchain
+
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE = ROOT / "templates" / "harvard.typ"
 KINDS = ROOT / "kinds.json"
@@ -209,13 +212,10 @@ def fill_ratio(pdf, margin_pt):
     under-written: the page limit was met by luck rather than by editing. The
     ratio is measured off the last text baseline in the PDF, not estimated.
     """
-    out = subprocess.run(["pdftotext", "-bbox", str(pdf), "-"],
-                         capture_output=True, text=True).stdout
-    ys = [float(m) for m in re.findall(r'yMax="([0-9.]+)"', out)]
-    hs = [float(m) for m in re.findall(r"<page width=\"[0-9.]+\" height=\"([0-9.]+)\"", out)]
-    if not ys or not hs:
+    span = toolchain.text_span(pdf)
+    if not span:
         return None
-    page_h, last = hs[0], max(ys)
+    page_h, _, last = span
     usable = page_h - 2 * margin_pt
     return max(0.0, min(1.0, (last - margin_pt) / usable))
 
@@ -235,13 +235,24 @@ def compile_pdf(src, out):
     with tempfile.TemporaryDirectory() as d:
         t = Path(d) / "cv.typ"
         t.write_text(src)
-        r = subprocess.run(["typst", "compile", "--root", str(t.parent), str(t), str(out)],
-                           capture_output=True, text=True)
-    if r.returncode != 0:
-        sys.exit("typst failed:\n" + (r.stderr or r.stdout))
-    info = subprocess.run(["pdfinfo", str(out)], capture_output=True, text=True).stdout
-    m = re.search(r"Pages:\s+(\d+)", info)
-    return int(m.group(1)) if m else -1
+        ok, msg = toolchain.render(t, out)
+    if not ok:
+        sys.exit("typst failed:\n" + msg)
+    return toolchain.page_count(out)
+
+
+def render_png(src, out_png):
+    """Page one as an image, because part of the check is looking at it.
+
+    Typst renders the PNG itself, so the preview survives on a machine with no
+    poppler. Returns False on a document Typst won't image, which is only ever
+    a missing picture, never a missing resume.
+    """
+    with tempfile.TemporaryDirectory() as d:
+        t = Path(d) / "cv.typ"
+        t.write_text(src)
+        ok, _ = toolchain.render(t, out_png, fmt="png", ppi=110)
+    return ok
 
 
 def candidates(p, dropped):
@@ -280,9 +291,10 @@ def main():
                     help="also write a PNG of page one next to the PDF, for looking at the result")
     a = ap.parse_args()
 
-    for tool in ("typst", "pdfinfo"):
-        if not shutil.which(tool):
-            sys.exit("missing dependency: " + tool)
+    if not toolchain.can_render():
+        sys.exit(toolchain.RENDER_HINT)
+    if not toolchain.backend():
+        sys.exit(toolchain.READ_HINT)
 
     p = load(a.profile)
     # a `style` block in the profile sets the defaults; flags still win
@@ -370,11 +382,10 @@ def main():
             print("  caps left out %d item(s) (still in the master profile):" % len(cfg["_capped"]))
             for c in cfg["_capped"]:
                 print("    - " + c)
-    if a.preview and shutil.which("pdftoppm"):
-        stem = out.with_suffix("")
-        subprocess.run(["pdftoppm", "-png", "-r", "110", "-singlefile", "-f", "1", "-l", "1",
-                        str(out), str(stem)], capture_output=True)
-        print("preview: %s.png" % stem)
+    if a.preview:
+        png = out.with_suffix(".png")
+        if render_png(src, png):
+            print("preview: %s" % png)
 
     print("%s  %d page(s)" % (out, pages))
     if fill is not None:

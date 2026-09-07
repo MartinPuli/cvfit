@@ -4,9 +4,10 @@ Point it at a job posting, give it whatever you've got about yourself, and it
 writes a one-page resume aimed at that posting. Then it checks the result and
 won't hand it over if something's wrong.
 
-It's a [Claude Code](https://claude.com/claude-code) skill. `SKILL.md` is the
-judgement, written down so it's done the same way every time. The two scripts do
-the part that shouldn't be improvised: rendering and checking.
+Two halves. `SKILL.md` is the judgement, written down so it's done the same way
+every time, and any agent can follow it: Claude Code, Codex, Cursor, Gemini
+CLI, or a chat window where you paste the file. The two scripts do the part
+that shouldn't be improvised: rendering and checking.
 
 ## The idea
 
@@ -27,22 +28,31 @@ choose and reorder. It doesn't get to promote you.
 
 ## Install
 
-You need Python 3.9 or newer, [Typst](https://typst.app), poppler for `pdfinfo`
-and `pdftotext`, and pyyaml.
+Python 3.9 or newer, plus:
 
 ```bash
-brew install typst poppler && pip install pyyaml
+pip install typst pyyaml pypdf
+```
+
+No system packages, so this is the same on macOS, Linux and Windows. If you'd
+rather use the native tools, `brew install typst poppler` (or your package
+manager) works too and is a little faster; cvfit takes whichever it finds.
+
+```bash
 git clone https://github.com/MartinPuli/cvfit.git
+cd cvfit && python3 tests/run.py
 ```
 
-As a Claude Code plugin, which is the easy way:
+Green means the pipeline works on your machine.
 
-```
-/plugin marketplace add MartinPuli/cvfit
-/plugin install cvfit@cvfit
-```
+## Use it from
 
-Or copy the repo into `~/.claude/skills/cvfit/` and it loads as a plain skill.
+| Where | How |
+|---|---|
+| **Claude Code** | `/plugin marketplace add MartinPuli/cvfit` then `/plugin install cvfit@cvfit`. Or copy the repo to `~/.claude/skills/cvfit/` |
+| **Codex, Cursor, Gemini CLI, Amp, Zed, Jules** | Clone it into the workspace. They read `AGENTS.md` on their own, which points at `SKILL.md` |
+| **ChatGPT, Claude.ai, any chat window** | Paste `SKILL.md` and `TAILORING.md`, paste the posting, answer its questions, then run the two commands yourself |
+| **No agent at all** | Copy `examples/ada-lovelace.yaml`, put your own history in it, run the two commands. The fitting, the measuring and the guard are all in the scripts |
 
 ## Two commands
 
@@ -53,7 +63,7 @@ python3 scripts/verify_cv.py out/cv.pdf --profile out/cv.profile.json --master e
 
 Build writes the PDF, a PNG of page one so you can actually look at it, and the
 effective profile: what landed on the page after caps and fitting. Verify exits
-non-zero when anything's off. `python3 tests/run.py` runs the checks.
+non-zero when anything's off.
 
 ## The file you edit
 
@@ -97,6 +107,14 @@ implicit spacing between blocks, and a section whose first entry had no title ro
 negative `v()` did nothing; an empty grid did nothing. Zeroing every implicit gap
 and owning them with named constants is what finally worked. The numbers are in
 the comments in `templates/harvard.typ`.
+
+## How it reads the page back
+
+Page count and page fill come from measuring the PDF, never from an estimate.
+With poppler installed that's exact. Without it, `pypdf` reads the same numbers
+in pure Python off each line's baseline, which lands within 0.2 of a percentage
+point on the example resumes. `scripts/toolchain.py` holds both paths, and a
+test compares them.
 
 ## Examples
 

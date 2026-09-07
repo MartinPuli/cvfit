@@ -10,8 +10,11 @@ tailoring moved a date, grew a title or invented an entry. With --target,
 also lists which of the posting's keywords reached the page. Exits non-zero
 on any failure.
 """
-import argparse, json, re, subprocess, sys
+import argparse, json, re, sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import toolchain
 
 # First-person pronouns per language. A resume speaks in fragments, not in the
 # first person, in every language this tool has been used in.
@@ -49,26 +52,24 @@ def main():
 
     fails, warns = [], []
 
-    info = subprocess.run(["pdfinfo", str(pdf)], capture_output=True, text=True).stdout
-    m = re.search(r"Pages:\s+(\d+)", info)
-    pages = int(m.group(1)) if m else -1
+    if not toolchain.backend():
+        sys.exit(toolchain.READ_HINT)
+
+    pages = toolchain.page_count(pdf)
     if pages > a.max_pages or pages < 1:
         fails.append("page count is %d, expected at most %d" % (pages, a.max_pages))
 
-    bb = subprocess.run(["pdftotext", "-bbox", str(pdf), "-"], capture_output=True, text=True).stdout
-    ys = [float(m) for m in re.findall(r'yMax="([0-9.]+)"', bb)]
-    tops = [float(m) for m in re.findall(r'yMin="([0-9.]+)"', bb)]
-    hs = [float(m) for m in re.findall(r'<page width="[0-9.]+" height="([0-9.]+)"', bb)]
+    span = toolchain.text_span(pdf)
     fill = None
-    if ys and hs and tops:
-        top = min(tops)
-        fill = (max(ys) - top) / (hs[0] - 2 * top)
+    if span:
+        page_h, top, bottom = span
+        fill = (bottom - top) / (page_h - 2 * top)
         if fill < a.min_fill:
             fails.append("content uses %.0f%% of the page, under the %.0f%% floor. A one-pager "
                          "that stops short was not edited to fit, it just ran out of material."
                          % (fill * 100, a.min_fill * 100))
 
-    text = subprocess.run(["pdftotext", str(pdf), "-"], capture_output=True, text=True).stdout
+    text = toolchain.text(pdf)
     if len(text.strip()) < 200:
         fails.append("text layer looks empty, an ATS would read nothing")
 

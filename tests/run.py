@@ -9,6 +9,9 @@ pipeline works on this machine. Exit code is the number of failures.
 import json, re, shutil, subprocess, sys, tempfile
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
+import toolchain
+
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -31,12 +34,11 @@ def run(*args):
 
 
 def pages(pdf):
-    m = re.search(r"Pages:\s+(\d+)", subprocess.run(["pdfinfo", str(pdf)], capture_output=True, text=True).stdout)
-    return int(m.group(1)) if m else -1
+    return toolchain.page_count(pdf)
 
 
 def text(pdf):
-    return subprocess.run(["pdftotext", str(pdf), "-"], capture_output=True, text=True).stdout
+    return toolchain.text(pdf)
 
 
 def headings(effective_json):
@@ -48,10 +50,12 @@ def load(path):
 
 
 def main():
-    for tool in ("typst", "pdfinfo", "pdftotext"):
-        if not shutil.which(tool):
-            print("missing dependency: %s" % tool)
-            return 1
+    if not toolchain.can_render():
+        print(toolchain.RENDER_HINT)
+        return 1
+    if not toolchain.backend():
+        print(toolchain.READ_HINT)
+        return 1
 
     with tempfile.TemporaryDirectory() as d:
         out = Path(d)
@@ -154,12 +158,31 @@ def main():
         code, log = run(VERIFY, out / "es-bad.pdf", "--lang", "es", "--min-fill", "0")
         check("spanish pronouns are rejected with --lang es", code != 0 and "pronoun" in log, log)
 
+        print("runs on a machine with no system packages")
+        # The two readers have to agree, or the fill number means something
+        # different depending on what happens to be installed.
+        real = toolchain._has_poppler
+        toolchain._has_poppler = lambda: True
+        a = toolchain.text_span(out / "standard.pdf") if shutil.which("pdftotext") else None
+        toolchain._has_poppler = lambda: False
+        b = toolchain.text_span(out / "standard.pdf") if toolchain._pypdf() else None
+        toolchain._has_poppler = real
+        if a and b:
+            fa, fb = (a[2] - a[1]) / (a[0] - 2 * a[1]), (b[2] - b[1]) / (b[0] - 2 * b[1])
+            check("poppler and pypdf agree on page fill", abs(fa - fb) < 0.01, "%.3f vs %.3f" % (fa, fb))
+        else:
+            check("both PDF readers present to compare", False,
+                  "skipped: install poppler and pip install pypdf to run this one")
+        check("a PDF reader is available", toolchain.backend() is not None)
+        check("Typst is available", toolchain.can_render())
+        check("AGENTS.md sends agents to SKILL.md", "SKILL.md" in (ROOT / "AGENTS.md").read_text())
+
         print("docs read like a person wrote them")
         SLOP = ["delve", "leverage", "seamless", "robust", "cutting-edge", "innovative", "empower", "harness",
                 "streamline", "elevate", "unlock", "landscape", "journey", "tapestry", "realm", "paradigm",
                 "synergy", "testament", "moreover", "furthermore", "ultimately", "utilize", "facilitate",
                 "game-changer", "in today's", "it's worth noting", "at the end of the day", "first and foremost"]
-        for f in ("README.md", "SKILL.md", "TAILORING.md"):
+        for f in ("README.md", "SKILL.md", "TAILORING.md", "AGENTS.md"):
             body = (ROOT / f).read_text(); low = body.lower()
             check(f + ": no em dashes", "\u2014" not in body)
             hits = [w for w in SLOP if re.search(r"\b" + re.escape(w) + r"\b", low)]
