@@ -1,4 +1,4 @@
-# cvfit — notes for AI agents
+# cvfit: notes for AI agents
 
 This repository is an agent skill in the open Agent Skills format. The skill
 itself is `SKILL.md` (mirrored at `skills/cvfit/SKILL.md` for the `skills` CLI
