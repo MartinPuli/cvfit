@@ -4,7 +4,9 @@ Point it at a job posting, give it whatever you've got about yourself, and it
 writes a one-page resume aimed at that posting. Then it checks the result and
 won't hand it over if something's wrong.
 
-It's a [Claude Code](https://claude.com/claude-code) skill. `SKILL.md` is the
+It's an agent skill in the open [Agent Skills](https://agentskills.io) format,
+so it runs in Claude Code, Codex, Cursor, Gemini CLI, GitHub Copilot, Windsurf,
+OpenCode or any other agent that reads a `SKILL.md`. `SKILL.md` is the
 judgement, written down so it's done the same way every time. The two scripts do
 the part that shouldn't be improvised: rendering and checking.
 
@@ -35,14 +37,39 @@ brew install typst poppler && pip install pyyaml
 git clone https://github.com/MartinPuli/cvfit.git
 ```
 
-As a Claude Code plugin, which is the easy way:
+Then install the skill into whichever agent you use. The easy way is the
+`skills` CLI, which detects the agents on your machine:
+
+```bash
+npx skills add MartinPuli/cvfit
+```
+
+Add `-a claude-code`, `-a codex`, `-a cursor`, `-a gemini-cli`,
+`-a github-copilot` or `-a windsurf` to target one agent.
+
+Or copy the repo (or the `skills/cvfit/` folder) into your agent's skills
+directory by hand:
+
+| Agent | Global | Per project |
+|---|---|---|
+| Claude Code | `~/.claude/skills/cvfit/` | `.claude/skills/cvfit/` |
+| Codex CLI | `~/.codex/skills/cvfit/` | `.agents/skills/cvfit/` |
+| Cursor | `~/.cursor/skills/cvfit/` (also reads `.claude/skills/` and `.codex/skills/`) | `.cursor/skills/cvfit/` |
+| Gemini CLI | `~/.gemini/skills/cvfit/` | `.gemini/skills/cvfit/` |
+| GitHub Copilot | `~/.copilot/skills/cvfit/` | `.github/skills/cvfit/` |
+| Windsurf / OpenCode | `~/.windsurf/skills/cvfit/` / `~/.opencode/skills/cvfit/` | `.windsurf/skills/cvfit/` / `.opencode/skills/cvfit/` |
+
+Claude Code users can also install it as a plugin:
 
 ```
 /plugin marketplace add MartinPuli/cvfit
 /plugin install cvfit@cvfit
 ```
 
-Or copy the repo into `~/.claude/skills/cvfit/` and it loads as a plain skill.
+Whatever the agent, the skill needs to be able to run the two Python scripts
+below (a shell tool), fetch a posting URL or read a screenshot, and open the
+PNG preview to look at the page. An agent without one of those still works;
+it just asks you to do that step.
 
 ## Two commands
 
